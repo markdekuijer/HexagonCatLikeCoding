@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.574817, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -499,7 +499,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 693328957}
-  - component: {fileID: 693328960}
   - component: {fileID: 693328959}
   - component: {fileID: 693328958}
   m_Layer: 0
@@ -563,17 +562,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 693328956}
   m_Mesh: {fileID: 0}
---- !u!114 &693328960
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 693328956}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da7b094bedc70e84ea15c786191a5429, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &881574590
 GameObject:
   m_ObjectHideFlags: 0
@@ -1036,9 +1024,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'White
-
-'
+  m_Text: Red
 --- !u!222 &1117346604
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1441,9 +1427,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colors:
   - {r: 0.9464503, g: 1, b: 0.029411793, a: 0}
-  - {r: 0.24448529, g: 0.97794116, b: 0.40129304, a: 0}
-  - {r: 0.28220075, g: 0, b: 0.77205884, a: 0}
-  - {r: 1, g: 1, b: 1, a: 0}
+  - {r: 0, g: 0.89705884, b: 0.19178493, a: 0}
+  - {r: 0.19852942, g: 0.4693713, b: 1, a: 0}
+  - {r: 1, g: 0.19117647, b: 0.19117647, a: 0}
   hexGrid: {fileID: 2065291061}
 --- !u!114 &1525802094
 MonoBehaviour:
@@ -1956,7 +1942,7 @@ GameObject:
   - component: {fileID: 1923171935}
   - component: {fileID: 1923171936}
   m_Layer: 5
-  m_Name: White
+  m_Name: Red
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2290,6 +2276,7 @@ MonoBehaviour:
   height: 6
   cellPrefab: {fileID: 114504543408344654, guid: 31168b2c970ca544099a924b80eafcee,
     type: 2}
+  noiseSource: {fileID: 2800000, guid: d0812259c38e9304cb90eb8787dcebd5, type: 3}
   cellLabelPrefab: {fileID: 114503728912798490, guid: 6ea23da0e161fc74797c187d5465682c,
     type: 2}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
