@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class HexGrid : MonoBehaviour
 {
@@ -148,5 +149,25 @@ public class HexGrid : MonoBehaviour
         {
             chunks[i].ShowUI(visible);
         }
+    }
+}
+
+public static class ListPool<T>
+{
+    static Stack<List<T>> stack = new Stack<List<T>>();
+
+    public static List<T> Get()
+    {
+        if (stack.Count > 0)
+        {
+            return stack.Pop();
+        }
+        return new List<T>();
+    }
+
+    public static void Add(List<T> list)
+    {
+        list.Clear();
+        stack.Push(list);
     }
 }
