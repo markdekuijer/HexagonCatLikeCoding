@@ -8,6 +8,10 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 0}
+      propertyPath: roads.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
       propertyPath: neighbors.Array.size
       value: 6
       objectReference: {fileID: 0}
@@ -70,7 +74,6 @@ MonoBehaviour:
   coordinates:
     x: 0
     z: 0
-  color: {r: 1, g: 1, b: 1, a: 0}
   neighbors:
   - {fileID: 0}
   - {fileID: 0}
@@ -78,3 +81,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  uiRect: {fileID: 0}
+  chunk: {fileID: 0}
+  roads: 000000000000
