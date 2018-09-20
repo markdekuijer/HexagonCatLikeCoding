@@ -138,6 +138,13 @@ public class HexCell : MonoBehaviour
             return outgoingRiver;
         }
     }
+    public HexDirection RiverBeginOrEndDirection
+    {
+        get
+        {
+            return hasIncomingRiver ? incomingRiver : outgoingRiver;
+        }
+    }
 
     [SerializeField] bool[] roads;
     public bool HasRoads
