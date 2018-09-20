@@ -19,13 +19,13 @@ public static class HexMetrics
     public const float verticalTerraceStepSize = 1f / (terracesPerSlope + 1);
 
     public static Texture2D noiseSource;
-    public const float cellPerturbStrengt = 0f; //4f;// original from tutorial
+    public const float cellPerturbStrengt = 4f; //4f; original from tutorial
     public const float noiseScale = 0.003f;
     public const float elevationPerturbStrenght = 1.5f;
 
     public const int chunkSizeX = 5, chunkSizeZ = 5;
 
-    public const float streamBedElevationOffset = -1f;
+    public const float streamBedElevationOffset = -1.75f;
     public const float riverSurfaceElevationOffset = -0.5f;
 
     static Vector3[] corners = {
