@@ -9,6 +9,7 @@ public static class HexMetrics
     public const float innerRadius = outerRadius * 0.866025404f;
 
     public const float solidFactor = 0.8f;
+    public const float waterFactor = 0.6f;
     public const float blendFactor = 1f - solidFactor;
 
     public const float elevationStep = 3;
@@ -26,7 +27,8 @@ public static class HexMetrics
     public const int chunkSizeX = 5, chunkSizeZ = 5;
 
     public const float streamBedElevationOffset = -1.75f;
-    public const float riverSurfaceElevationOffset = -0.5f;
+    public const float waterElevationOffset = -0.5f;
+    public const float waterBlendFactor = 1f - waterFactor;
 
     static Vector3[] corners = {
         new Vector3(0f, 0f, outerRadius),
@@ -60,9 +62,22 @@ public static class HexMetrics
         return (corners[(int)direction] + corners[(int)direction + 1]) * 0.5f * solidFactor;
     }
 
+    public static Vector3 GetFirstWaterCorner(HexDirection direction)
+    {
+        return corners[(int)direction] * waterFactor;
+    }
+    public static Vector3 GetSecondWaterCorner(HexDirection direction)
+    {
+        return corners[(int)direction + 1] * waterFactor;
+    }
+
     public static Vector3 GetBridge(HexDirection direction)
     {
         return (corners[(int)direction] + corners[(int)direction + 1]) * blendFactor;
+    }
+    public static Vector3 GetWaterBridge(HexDirection direction)
+    {
+        return (corners[(int)direction] + corners[(int)direction + 1]) * waterBlendFactor;
     }
 
     public static Vector3 TerraceLerp(Vector3 a, Vector3 b, int step)
