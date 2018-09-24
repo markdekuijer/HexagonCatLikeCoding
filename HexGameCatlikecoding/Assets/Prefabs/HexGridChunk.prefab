@@ -827,7 +827,7 @@ MonoBehaviour:
   useCollider: 0
   useColors: 0
   useUVcoordinates: 1
-  useUV2coordinates: 0
+  useUV2coordinates: 1
 --- !u!223 &223637781300719124
 Canvas:
   m_ObjectHideFlags: 1
