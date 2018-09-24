@@ -35,7 +35,7 @@ public static class HexMetrics
     static HexHash[] hashGrid;
 
     public const float wallHeight = 3f;
-
+	public const float wallThickness = 0.75f;
 
     static float[][] featureThreshold =
     {
@@ -167,6 +167,16 @@ public static class HexMetrics
         position.x += (sample.x * 2 - 1) * cellPerturbStrengt;
         position.z += (sample.z * 2 - 1) * cellPerturbStrengt;
         return position;
+    }
+
+    public static Vector3 WallThicknessOffset(Vector3 near, Vector3 far)
+    {
+        Vector3 offset;
+        offset.x = far.x - near.x;
+        offset.y = 0;
+        offset.z = far.z - near.z;
+
+        return offset.normalized * (wallThickness * 0.5f);
     }
 }
 
