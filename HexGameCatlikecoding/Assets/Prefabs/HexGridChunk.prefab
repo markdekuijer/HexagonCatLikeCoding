@@ -11,6 +11,22 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1323353077639268}
   m_IsPrefabParent: 1
+--- !u!1 &1124015276120376
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4043407910324118}
+  - component: {fileID: 114101098961714266}
+  m_Layer: 0
+  m_Name: Feature
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1228953477677962
 GameObject:
   m_ObjectHideFlags: 0
@@ -154,6 +170,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!4 &4043407910324118
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1124015276120376}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4548303824845208}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4052380992748744
 Transform:
   m_ObjectHideFlags: 1
@@ -223,6 +252,7 @@ Transform:
   - {fileID: 4743490441303152}
   - {fileID: 4507723701387028}
   - {fileID: 4075151127393484}
+  - {fileID: 4043407910324118}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -554,6 +584,47 @@ MonoBehaviour:
   useColors: 0
   useUVcoordinates: 1
   useUV2coordinates: 0
+--- !u!114 &114101098961714266
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1124015276120376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c8d024382c68a4ca0439badaf9d6a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  urbanCollectoins:
+  - prefabs:
+    - {fileID: 4000011812086372, guid: 21b1020286582424ab6d62085ed5ee87, type: 2}
+    - {fileID: 4000011812086372, guid: 5d26578fd32c84d1ab4d755ab7f23577, type: 2}
+  - prefabs:
+    - {fileID: 4000013436407900, guid: 89adbf41f320f4141964bfa388ba2865, type: 2}
+    - {fileID: 4000013436407900, guid: 2fad1b4af64d84c8e810f040299dec1e, type: 2}
+  - prefabs:
+    - {fileID: 4000013997932258, guid: bca46d0c670c447a0a5c7208498000ab, type: 2}
+    - {fileID: 4000013997932258, guid: 4c4b904516a814dc7b4433a49713c96f, type: 2}
+  farmCollections:
+  - prefabs:
+    - {fileID: 4000011812086372, guid: cc82f4b5b1845cb478f0e1ab6a8f65f7, type: 2}
+    - {fileID: 4000011812086372, guid: 085691db155e7b249b3ed0ac02d1ea95, type: 2}
+  - prefabs:
+    - {fileID: 4000013436407900, guid: be259ecd17588bf4d9b953341480944d, type: 2}
+    - {fileID: 4000013436407900, guid: f11ca8e0faf58c740bf7255d657a4134, type: 2}
+  - prefabs:
+    - {fileID: 4000013997932258, guid: 978467abeca7c54449b152d0f858f8bb, type: 2}
+    - {fileID: 4000013997932258, guid: 84163f731061d064b80330df0b9b976b, type: 2}
+  plantCollections:
+  - prefabs:
+    - {fileID: 4000011812086372, guid: b661565d13e1d2c429a9d04db38acfde, type: 2}
+    - {fileID: 4000011812086372, guid: f554dd418b7ee91419c1478d78116994, type: 2}
+  - prefabs:
+    - {fileID: 4000013436407900, guid: e30119d0bccacdb4c99e3f2e2cce391b, type: 2}
+    - {fileID: 4000013436407900, guid: 62238961ca4eb984a9a261ffa628813d, type: 2}
+  - prefabs:
+    - {fileID: 4000013997932258, guid: c1e734751215110409fc99170b0ff0ab, type: 2}
+    - {fileID: 4000013997932258, guid: 69b7a44692c7c6947a45a24f363004e1, type: 2}
 --- !u!114 &114207860060880616
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -586,6 +657,7 @@ MonoBehaviour:
   water: {fileID: 114445079684585430}
   waterShore: {fileID: 114079611844297048}
   estuaries: {fileID: 114752036998531874}
+  features: {fileID: 114101098961714266}
 --- !u!114 &114445079684585430
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -630,7 +702,7 @@ MonoBehaviour:
   useCollider: 0
   useColors: 0
   useUVcoordinates: 1
-  useUV2coordinates: 1
+  useUV2coordinates: 0
 --- !u!114 &114883636741786924
 MonoBehaviour:
   m_ObjectHideFlags: 1

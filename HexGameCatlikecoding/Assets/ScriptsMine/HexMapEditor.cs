@@ -16,6 +16,15 @@ public class HexMapEditor : MonoBehaviour
     int activeWaterLevel;
     bool applyWaterLevel;
 
+    int activeUrbanLevel;
+    bool applyUrbanLevel;
+
+    int activeFarmLevel;
+    bool applyFarmLevel;
+
+    int activePlantLevel;
+    bool applyPlantLevel;
+
     OptionalToggle riverMode, roadMode;
 
     int brushSize;
@@ -110,6 +119,12 @@ public class HexMapEditor : MonoBehaviour
                 cell.Elevation = activeElevation;
             if (applyWaterLevel)
                 cell.WaterLevel = activeWaterLevel;
+            if (applyUrbanLevel)
+                cell.UrbanLevel = activeUrbanLevel;
+            if (applyFarmLevel)
+                cell.FarmLevel = activeFarmLevel;
+            if (applyPlantLevel)
+                cell.PlantLevel = activePlantLevel;
             if (riverMode == OptionalToggle.No)
                 cell.RemoveRiver();
             if (roadMode == OptionalToggle.No)
@@ -135,14 +150,13 @@ public class HexMapEditor : MonoBehaviour
             activeColor = colors[index];
     }
 
-    public void SetElevation(float elevation)
-    {
-        activeElevation = (int)elevation;
-    }
-
     public void SetApplyElevation(bool toggle)
     {
         applyElevation = toggle;
+    }
+    public void SetElevation(float elevation)
+    {
+        activeElevation = (int)elevation;
     }
 
     public void SetRiverMode(int mode)
@@ -169,10 +183,36 @@ public class HexMapEditor : MonoBehaviour
     {
         applyWaterLevel = toggle;
     }
-
     public void SetWaterLevel(float level)
     {
         activeWaterLevel = (int)level;
+    }
+
+    public void SetApplyUrbanLevel(bool toggle)
+    {
+        applyUrbanLevel = toggle;
+    }
+    public void SetUrbanLevel(float level)
+    {
+        activeUrbanLevel = (int)level;
+    }
+
+    public void SetApplyFarmLevel(bool toggle)
+    {
+        applyFarmLevel = toggle;
+    }
+    public void SetFarmLevel(float level)
+    {
+        activeFarmLevel = (int)level;
+    }
+
+    public void SetApplyPlantLevel(bool toggle)
+    {
+        applyPlantLevel = toggle;
+    }
+    public void SetPlantLevel(float level)
+    {
+        activePlantLevel = (int)level;
     }
 }
 
