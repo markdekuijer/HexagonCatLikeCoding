@@ -240,6 +240,23 @@ public class HexCell : MonoBehaviour
         }
     }
 
+    bool walled;
+    public bool Walled
+    {
+        get
+        {
+            return walled;
+        }
+        set
+        {
+            if (walled != value)
+            {
+                walled = value;
+                Refresh();
+            }
+        }
+    }
+
     #region rivers
     public void SetOutgoingRiver(HexDirection direction)
     {

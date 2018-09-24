@@ -34,6 +34,9 @@ public static class HexMetrics
     public const float hashGridScale = 0.25f;
     static HexHash[] hashGrid;
 
+    public const float wallHeight = 3f;
+
+
     static float[][] featureThreshold =
     {
         new float[] {0.0f, 0.0f ,0.4f},

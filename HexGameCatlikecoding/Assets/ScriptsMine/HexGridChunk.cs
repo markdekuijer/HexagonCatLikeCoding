@@ -504,6 +504,8 @@ public class HexGridChunk : MonoBehaviour {
             neighbor.Color, cell.HasRoadThroughEdge(direction));
 		}
 
+        features.AddWall(e1, cell, e2, neighbor);
+
 		HexCell nextNeighbor = cell.GetNeighbor(direction.Next());
 		if (direction <= HexDirection.E && nextNeighbor != null)
         {
