@@ -6,6 +6,8 @@ public class HexFeatureManager : MonoBehaviour
     public HexMesh walls;
     Transform container;
 
+    public Transform wallTower;
+
     public void AddFeature(HexCell cell, Vector3 position)
     {
         HexHash hash = HexMetrics.SampleHashGrid(position);
@@ -235,6 +237,14 @@ public class HexFeatureManager : MonoBehaviour
         walls.AddQuadUnperturbed(v2, v1, v4, v3);
 
         walls.AddQuadUnperturbed(t1, t2, v3, v4);
+
+
+        Transform towerInstanec = Instantiate(wallTower);
+        towerInstanec.transform.localPosition = (left + right) * 0.5f;
+        Vector3 rightDirection = right - left;
+        rightDirection.y = 0;
+        towerInstanec.transform.right = rightDirection;
+        towerInstanec.SetParent(container, false);
     }
 
     public void Clear()
