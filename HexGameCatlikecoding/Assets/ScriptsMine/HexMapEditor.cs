@@ -25,6 +25,9 @@ public class HexMapEditor : MonoBehaviour
     int activePlantLevel;
     bool applyPlantLevel;
 
+    int activeSpecialIndex;
+    bool applySpecialIndex;
+
     OptionalToggle riverMode, roadMode, walledMode;
 
     int brushSize;
@@ -125,6 +128,8 @@ public class HexMapEditor : MonoBehaviour
                 cell.FarmLevel = activeFarmLevel;
             if (applyPlantLevel)
                 cell.PlantLevel = activePlantLevel;
+            if (applySpecialIndex)
+                cell.SpecialIndex = activeSpecialIndex;
             if (riverMode == OptionalToggle.No)
                 cell.RemoveRiver();
             if (roadMode == OptionalToggle.No)
@@ -219,6 +224,16 @@ public class HexMapEditor : MonoBehaviour
     {
         activePlantLevel = (int)level;
     }
+
+    public void SetApplySpecialIndex(bool toggle)
+    {
+        applySpecialIndex = toggle;
+    }
+    public void SetSpecialIndex(float index)
+    {
+        activeSpecialIndex = (int)index;
+    }
+
 }
 
 public enum OptionalToggle
