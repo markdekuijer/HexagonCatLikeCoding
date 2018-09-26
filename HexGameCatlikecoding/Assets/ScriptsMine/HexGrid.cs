@@ -17,8 +17,8 @@ public class HexGrid : MonoBehaviour
     public Text cellLabelPrefab;
     HexCell[] cells;
 
-    public Color defaultColor = Color.white;
     public Color touchedColor = Color.magenta;
+    public Color[] colors;
 
     public int seed;
 
@@ -26,6 +26,7 @@ public class HexGrid : MonoBehaviour
     {
         HexMetrics.noiseSource = noiseSource;
         HexMetrics.InitializeHashGrid(seed);
+        HexMetrics.colors = colors;
 
         cellCountX = chunkCountX * HexMetrics.chunkSizeX;
         cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
@@ -40,6 +41,7 @@ public class HexGrid : MonoBehaviour
         {
             HexMetrics.noiseSource = noiseSource;
             HexMetrics.InitializeHashGrid(seed);
+            HexMetrics.colors = colors;
         }
     }
 
@@ -101,7 +103,6 @@ public class HexGrid : MonoBehaviour
         HexCell cell = cells[i] = Instantiate<HexCell>(cellPrefab);
         cell.transform.localPosition = position;
         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
-        cell.Color = defaultColor;
 
         if (x > 0)
         {

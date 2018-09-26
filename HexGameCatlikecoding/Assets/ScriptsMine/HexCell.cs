@@ -53,19 +53,27 @@ public class HexCell : MonoBehaviour
         }
     }
 
-    Color color;
+    int terrainTypeIndex;
+    public int TerrainTypeIndex
+    {
+        get
+        {
+            return terrainTypeIndex;
+        }
+        set
+        {
+            if (terrainTypeIndex != value)
+            {
+                terrainTypeIndex = value;
+                Refresh();
+            }
+        }
+    }
     public Color Color
     {
         get
         {
-            return color;
-        }
-        set
-        {
-            if (color == value)
-                return;
-            color = value;
-            Refresh();
+            return HexMetrics.colors[terrainTypeIndex];
         }
     }
 

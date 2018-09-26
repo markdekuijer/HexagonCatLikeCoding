@@ -1,14 +1,11 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class HexMapEditor : MonoBehaviour
 {
-    public Color[] colors;
-
     public HexGrid hexGrid;
-
-    private Color activeColor;
-    private bool applyColor;
+    int activeTerrainTypeIndex;
 
     int activeElevation;
     bool applyElevation;
@@ -36,11 +33,6 @@ public class HexMapEditor : MonoBehaviour
     HexDirection dragDirection;
     HexCell previousCell;
 
-    void Awake()
-    {
-        SelectColor(0);
-    }
-
     void Update()
     {
         if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject())
@@ -51,6 +43,13 @@ public class HexMapEditor : MonoBehaviour
         {
             previousCell = null;
         }
+    }
+
+    public void Save()
+    {
+        string path = Path.Combine(Application.persistentDataPath, "test.map");
+        Stream filestream = File.Open(path, FileMode.Create);
+        filestream.Close();
     }
 
     void HandleInput()
@@ -116,8 +115,8 @@ public class HexMapEditor : MonoBehaviour
     {
         if (cell)
         {
-            if (applyColor)
-                cell.Color = activeColor;
+            if (activeTerrainTypeIndex > 0)
+                cell.TerrainTypeIndex = activeTerrainTypeIndex;
             if(applyElevation)
                 cell.Elevation = activeElevation;
             if (applyWaterLevel)
@@ -150,11 +149,9 @@ public class HexMapEditor : MonoBehaviour
         }
     }
 
-    public void SelectColor(int index)
+    public void SetTerrainTypeIndex(int index)
     {
-        applyColor = index >= 0;
-        if (applyColor)
-            activeColor = colors[index];
+        activeTerrainTypeIndex = index;
     }
 
     public void SetApplyElevation(bool toggle)

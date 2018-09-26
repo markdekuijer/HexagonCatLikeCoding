@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44319665, g: 0.49242997, b: 0.5721098, a: 1}
+  m_IndirectSpecularColor: {r: 0.44319683, g: 0.4924299, b: 0.57210976, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -7807,12 +7807,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1de8686556c24b4b9af2dd253aabdfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colors:
-  - {r: 0.9464503, g: 1, b: 0.029411793, a: 0}
-  - {r: 0, g: 0.89705884, b: 0.19178493, a: 0}
-  - {r: 0.19852942, g: 0.4693713, b: 1, a: 0}
-  - {r: 1, g: 0.19117647, b: 0.19117647, a: 0}
-  - {r: 1, g: 0.5943204, b: 0.08088237, a: 0}
   hexGrid: {fileID: 2065291061}
 --- !u!114 &1525802094
 MonoBehaviour:
@@ -10798,8 +10792,13 @@ MonoBehaviour:
   noiseSource: {fileID: 2800000, guid: d0812259c38e9304cb90eb8787dcebd5, type: 3}
   cellLabelPrefab: {fileID: 114503728912798490, guid: 6ea23da0e161fc74797c187d5465682c,
     type: 2}
-  defaultColor: {r: 1, g: 1, b: 1, a: 1}
   touchedColor: {r: 1, g: 0, b: 1, a: 1}
+  colors:
+  - {r: 0.13235295, g: 0.3537524, b: 1, a: 0}
+  - {r: 1, g: 0.21323532, b: 0.21323532, a: 0}
+  - {r: 0.23286001, g: 0.8235294, b: 0, a: 0}
+  - {r: 0.954564, g: 1, b: 0.17647058, a: 0}
+  - {r: 1, g: 1, b: 1, a: 0}
   seed: 1234
 --- !u!4 &2065291062
 Transform:
