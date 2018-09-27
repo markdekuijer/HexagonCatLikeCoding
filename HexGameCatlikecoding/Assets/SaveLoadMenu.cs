@@ -69,6 +69,38 @@ public class SaveLoadMenu : MonoBehaviour
         }
     }
 
+    public void Delete()
+    {
+        string path = GetSelectedPath();
+        if (path == null)
+            return;
+
+        if(File.Exists(path))
+            File.Delete(path);
+
+        nameInput.text = "";
+        FillList();
+    }
+
+    void FillList()
+    {
+        for (int i = 0; i < listContent.childCount; i++)
+        {
+            Destroy(listContent.GetChild(i).gameObject);
+        }
+
+        string[] paths = Directory.GetFiles(Application.persistentDataPath, "*.map");
+        System.Array.Sort(paths);
+
+        for (int i = 0; i < paths.Length; i++)
+        {
+            SaveLoadItem item = Instantiate(itemPrefab);
+            item.menu = this;
+            item.MapName = Path.GetFileNameWithoutExtension(paths[i]);
+            item.transform.SetParent(listContent, false);
+        }
+    }
+
     public void SelectItem(string name)
     {
         nameInput.text = name;
@@ -87,6 +119,7 @@ public class SaveLoadMenu : MonoBehaviour
             menuLabel.text = "Load Map";
             actionButtonLabel.text = "Load";
         }
+        FillList();
         gameObject.SetActive(true);
         HexMapCamera.Locked = true;
     }

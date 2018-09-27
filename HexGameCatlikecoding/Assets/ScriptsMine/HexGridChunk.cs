@@ -1,9 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class HexGridChunk : MonoBehaviour {
+public class HexGridChunk : MonoBehaviour
+{
+    static Color color1 = new Color(1f, 0f, 0f);
+    static Color color2 = new Color(0f, 1f, 0f);
+    static Color color3 = new Color(0f, 0f, 1f);
 
-	public HexMesh terrain, rivers, roads, water, waterShore, estuaries;
+
+    public HexMesh terrain, rivers, roads, water, waterShore, estuaries;
     public HexFeatureManager features;
 
 	HexCell[] cells;
@@ -228,7 +233,7 @@ public class HexGridChunk : MonoBehaviour {
 
 	void TriangulateWithoutRiver(HexDirection direction, HexCell cell, Vector3 center, EdgeVertices e)
     {
-		TriangulateEdgeFan(center, e, cell.Color);
+		TriangulateEdgeFan(center, e, color1);
 
 		if (cell.HasRoads)
         {
@@ -284,8 +289,8 @@ public class HexGridChunk : MonoBehaviour {
 			Vector3.Lerp(center, e.v5, 0.5f)
 		);
 
-		TriangulateEdgeStrip(m, cell.Color, e, cell.Color);
-		TriangulateEdgeFan(center, m, cell.Color);
+		TriangulateEdgeStrip(m, cell.Color, e, color1);
+		TriangulateEdgeFan(center, m, color1);
 
         if (!cell.IsUnderWater && !cell.HasRoadThroughEdge(direction))
             features.AddFeature(cell, (center + e.v1 + e.v5) * (1f / 3f));
@@ -446,18 +451,18 @@ public class HexGridChunk : MonoBehaviour {
 
 		m.v3.y = center.y = e.v3.y;
 
-		TriangulateEdgeStrip(m, cell.Color, e, cell.Color);
+		TriangulateEdgeStrip(m, color1, e, color1);
 
 		terrain.AddTriangle(centerL, m.v1, m.v2);
-		terrain.AddTriangleColor(cell.Color);
 
 		terrain.AddQuad(centerL, center, m.v2, m.v3);
-		terrain.AddQuadColor(cell.Color);
 		terrain.AddQuad(center, centerR, m.v3, m.v4);
-		terrain.AddQuadColor(cell.Color);
-
 		terrain.AddTriangle(centerR, m.v4, m.v5);
-		terrain.AddTriangleColor(cell.Color);
+
+		terrain.AddTriangleColor(color1);
+		terrain.AddQuadColor(color1);
+		terrain.AddQuadColor(color1);
+		terrain.AddTriangleColor(color1);
 
 		if (!cell.IsUnderWater)
         {

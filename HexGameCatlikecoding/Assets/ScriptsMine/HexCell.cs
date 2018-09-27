@@ -4,7 +4,6 @@ using System.IO;
 public class HexCell : MonoBehaviour
 {
     public HexCoordinates coordinates;
-
     [SerializeField] HexCell[] neighbors;
 
     public RectTransform uiRect;
