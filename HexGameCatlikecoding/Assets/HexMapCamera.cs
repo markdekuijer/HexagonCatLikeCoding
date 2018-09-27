@@ -2,6 +2,8 @@
 
 public class HexMapCamera : MonoBehaviour
 {
+    static HexMapCamera instance;
+
     Transform swivel, stick;
     float zoom = 1f;
     float rotationAngle;
@@ -15,8 +17,22 @@ public class HexMapCamera : MonoBehaviour
 
     public float rotationSpeed;
 
+    public static bool Locked
+    {
+        set
+        {
+            instance.enabled = !value;
+        }
+    }
+
+    public static void ValidatePosition()
+    {
+        instance.AdjustPosition(0f, 0f);
+    }
+
     void Awake()
     {
+        instance = this;
         swivel = transform.GetChild(0);
         stick = swivel.GetChild(0);
     }
@@ -74,10 +90,10 @@ public class HexMapCamera : MonoBehaviour
 
     Vector3 ClampPosition(Vector3 position)
     {
-        float maxX = (grid.chunkCountX * HexMetrics.chunkSizeX - 0.5f) * (HexMetrics.innerRadius * 2f);
+        float maxX = (grid.cellCountX - 0.5f) * (HexMetrics.innerRadius * 2f);
         position.x = Mathf.Clamp(position.x, 0, maxX);
 
-        float maxZ = (grid.chunkCountZ * HexMetrics.chunkSizeZ - 1) * (HexMetrics.outerRadius * 1.5f);
+        float maxZ = (grid.cellCountZ - 1) * (HexMetrics.outerRadius * 1.5f);
         position.z = Mathf.Clamp(position.z, 0, maxZ);
 
         return position;

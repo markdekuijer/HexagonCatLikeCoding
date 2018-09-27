@@ -45,13 +45,6 @@ public class HexMapEditor : MonoBehaviour
         }
     }
 
-    public void Save()
-    {
-        string path = Path.Combine(Application.persistentDataPath, "test.map");
-        Stream filestream = File.Open(path, FileMode.Create);
-        filestream.Close();
-    }
-
     void HandleInput()
     {
         Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
