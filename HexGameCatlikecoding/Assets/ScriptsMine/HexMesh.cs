@@ -3,17 +3,18 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
-public class HexMesh : MonoBehaviour {
-
+public class HexMesh : MonoBehaviour
+{
 	Mesh hexMesh, rivers;
 	MeshCollider meshCollider;
 
-    [NonSerialized] List<Vector3> vertices;
+    [NonSerialized] List<Vector3> vertices, terrainTypes;
     [NonSerialized] List<Vector2> uvs, uv2s;
     [NonSerialized] List<Color> colors;
     [NonSerialized] List<int> triangles;
 
     public bool useCollider, useColors, useUVcoordinates, useUV2coordinates;
+    public bool useTerrainTypes;
 
     void Awake ()
     {
@@ -43,6 +44,11 @@ public class HexMesh : MonoBehaviour {
             uv2s = ListPool<Vector2>.Get();
             uv2s.Clear();
         }
+        if (useTerrainTypes)
+        {
+            terrainTypes = ListPool<Vector3>.Get();
+            terrainTypes.Clear();
+        }
 
         triangles = ListPool<int>.Get();
         vertices.Clear();
@@ -69,6 +75,11 @@ public class HexMesh : MonoBehaviour {
             hexMesh.SetUVs(1, uv2s);
             ListPool<Vector2>.Add(uv2s);
         }
+        if (useTerrainTypes)
+        {
+            hexMesh.SetUVs(2, terrainTypes);
+            ListPool<Vector3>.Add(terrainTypes);
+        }
 
         hexMesh.SetTriangles(triangles, 0);
         ListPool<int>.Add(triangles);
@@ -88,7 +99,6 @@ public class HexMesh : MonoBehaviour {
 		triangles.Add(vertexIndex + 1);
 		triangles.Add(vertexIndex + 2);
 	}
-
     public void AddTriangleUnperturbed(Vector3 v1, Vector3 v2, Vector3 v3)
     {
         int vertexIndex = vertices.Count;
@@ -99,8 +109,14 @@ public class HexMesh : MonoBehaviour {
         triangles.Add(vertexIndex + 1);
         triangles.Add(vertexIndex + 2);
     }
+    public void AddTriangleTerrainTypes(Vector3 types)
+    {
+        terrainTypes.Add(types);
+        terrainTypes.Add(types);
+        terrainTypes.Add(types);
+    }
 
-	public void AddQuad (Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4)
+    public void AddQuad (Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4)
     {
 		int vertexIndex = vertices.Count;
 		vertices.Add(HexMetrics.Perturb(v1));
@@ -127,6 +143,13 @@ public class HexMesh : MonoBehaviour {
         triangles.Add(vertexIndex + 1);
         triangles.Add(vertexIndex + 2);
         triangles.Add(vertexIndex + 3);
+    }
+    public void AddQuadTerrainTypes(Vector3 types)
+    {
+        terrainTypes.Add(types);
+        terrainTypes.Add(types);
+        terrainTypes.Add(types);
+        terrainTypes.Add(types);
     }
 
     public void AddTriangleUV(Vector2 uv1, Vector2 uv2, Vector2 uv3)
