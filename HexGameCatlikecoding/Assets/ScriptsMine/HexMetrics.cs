@@ -352,25 +352,21 @@ public class HexCellPriorityQueue
     {
         HexCell current = list[oldPriority];
         HexCell next = current.NextWithSamePriority;
-        if (current == null)
+        if (current == cell)
         {
             list[oldPriority] = next;
         }
         else
         {
-            while(next != current)
+            while (next != cell)
             {
                 current = next;
-                if(next == null)
-                {
-                    //print("a");
-                }
                 next = current.NextWithSamePriority;
             }
             current.NextWithSamePriority = cell.NextWithSamePriority;
-            Enqueue(cell);
-            count -= 1;
         }
+        Enqueue(cell);
+        count -= 1;
     }
 
     public void Clear()
