@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.IO;
 
 public static class HexMetrics
 {
@@ -242,6 +243,14 @@ public struct HexCoordinates
         return new HexCoordinates(iX, iZ);
     }
 
+    public static HexCoordinates Load(BinaryReader reader)
+    {
+        HexCoordinates c;
+        c.x = reader.ReadInt32();
+        c.z = reader.ReadInt32();
+        return c;
+    } 
+
     public int DistanceTo(HexCoordinates other)
     {
         return
@@ -275,6 +284,15 @@ public struct HexCoordinates
         }
     }
 
+    public void Save(BinaryWriter writer)
+    {
+        writer.Write(x);
+        writer.Write(z);
+    }
+    public void Load()
+    {
+
+    }
 
     public override string ToString()
     {
@@ -343,6 +361,10 @@ public class HexCellPriorityQueue
             while(next != current)
             {
                 current = next;
+                if(next == null)
+                {
+                    //print("a");
+                }
                 next = current.NextWithSamePriority;
             }
             current.NextWithSamePriority = cell.NextWithSamePriority;

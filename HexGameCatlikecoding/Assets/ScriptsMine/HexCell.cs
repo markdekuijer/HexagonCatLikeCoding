@@ -313,6 +313,8 @@ public class HexCell : MonoBehaviour
     public HexCell NextWithSamePriority { get; set; }
     public int SearchPhase { get; set; }
 
+    public HexUnit Unit { get; set; }
+
     #region rivers
     public void SetOutgoingRiver(HexDirection direction)
     {
@@ -555,10 +557,14 @@ public class HexCell : MonoBehaviour
                     neighbor.chunk.Refresh();
                 }
             }
+            if (Unit)
+                Unit.ValidatePosition();
         }
     }
     void RefreshSelfOnly()
     {
         chunk.Refresh();
+        if (Unit)
+            Unit.ValidatePosition();
     }
 }
