@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 using System.Collections.Generic;
 
 public class HexGrid : MonoBehaviour
@@ -46,11 +47,12 @@ public class HexGrid : MonoBehaviour
             return false;
         }
 
+        ClearPath();
         if (chunks != null)
         {
             for (int i = 0; i < chunks.Length; i++)
             {
-                Destroy(chunks[i]);
+                Destroy(chunks[i].gameObject);
             }
         }
 
@@ -63,6 +65,11 @@ public class HexGrid : MonoBehaviour
         CreateChunks();
         CreateCells();
 
+        for (int i = 0; i < cells.Length; i++)
+        {
+            cells[i].DisableHighlight();
+        }
+
         return true;
     }
 
@@ -73,7 +80,6 @@ public class HexGrid : MonoBehaviour
         int index = coordinates.X + coordinates.Z * cellCountX + coordinates.Z / 2;
         return cells[index];
     }
-
     public HexCell GetCell(HexCoordinates coords)
     {
         int z = coords.Z;
@@ -99,7 +105,6 @@ public class HexGrid : MonoBehaviour
             }
         }
     }
-
     void CreateChunks()
     {
         chunks = new HexGridChunk[chunkCountX * chunkCountZ];
@@ -153,13 +158,11 @@ public class HexGrid : MonoBehaviour
         Text label = Instantiate<Text>(cellLabelPrefab);
         label.rectTransform.anchoredPosition =
             new Vector2(position.x, position.z);
-        label.text = cell.coordinates.ToStringOnSeparateLines();
         cell.uiRect = label.rectTransform;
         cell.Elevation = 0;
 
         AddCellToChunk(x, z, cell);
     }
-
     void AddCellToChunk(int x, int z, HexCell cell)
     {
         int chunkX = x / HexMetrics.chunkSizeX;
@@ -179,6 +182,136 @@ public class HexGrid : MonoBehaviour
         }
     }
 
+    HexCellPriorityQueue searchOpenNodes;
+    int searchOpenNodesPhase;
+
+    HexCell currentPathFrom, currentPathTo;
+    bool currentPathExists;
+
+    public void FindPath(HexCell fromCell, HexCell toCell, int speed)
+    {
+        System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+        sw.Start();
+        ClearPath();
+        currentPathFrom = fromCell;
+        currentPathTo = toCell;
+        currentPathExists = Search(fromCell, toCell, speed);
+        ShowPath(speed);
+        sw.Stop();
+        print(sw.ElapsedMilliseconds);
+    }
+    bool Search(HexCell fromCell, HexCell toCell, int speed)
+    {
+        searchOpenNodesPhase += 2;
+
+        if (searchOpenNodes == null)
+            searchOpenNodes = new HexCellPriorityQueue();
+        else
+            searchOpenNodes.Clear();
+
+        fromCell.SearchPhase = searchOpenNodesPhase;
+        fromCell.Distance = 0;
+        searchOpenNodes.Enqueue(fromCell);
+
+        while(searchOpenNodes.Count > 0)
+        {
+            HexCell current = searchOpenNodes.Dequeue();
+            current.SearchPhase += 1;
+
+            if(current == toCell)
+            {
+                return true;
+            }
+
+            int currentTurn = current.Distance / speed;
+
+            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+            {
+                HexCell neighbor = current.GetNeighbor(d);
+                if (neighbor == null || neighbor.SearchPhase > searchOpenNodesPhase) 
+                    continue;
+                if (neighbor.IsUnderWater)
+                    continue;
+
+                HexEdgeType edgeType = current.GetEdgeType(neighbor);
+                if (edgeType == HexEdgeType.Cliff)
+                    continue;
+
+                int moveCost = 0;
+                if (current.HasRoadThroughEdge(d))
+                {
+                    moveCost += 1;
+                }
+                else if (current.Walled != neighbor.Walled)
+                {
+                    continue;
+                }
+                else
+                {
+                    moveCost += edgeType == HexEdgeType.Flat ? 5 : 10;
+                    moveCost += neighbor.UrbanLevel + neighbor.FarmLevel + neighbor.PlantLevel;
+                }
+
+                int distance = current.Distance + moveCost;
+                int turn = distance / speed;
+
+                if (turn > currentTurn)
+                    distance = turn * speed + moveCost;
+
+                if (neighbor.SearchPhase < searchOpenNodesPhase)
+                {
+                    neighbor.SearchPhase = searchOpenNodesPhase;
+                    neighbor.Distance = distance;
+                    neighbor.PathFrom = current;
+                    neighbor.SearchHeuristic = neighbor.coordinates.DistanceTo(toCell.coordinates);
+                    searchOpenNodes.Enqueue(neighbor);
+                }
+                else if(distance < neighbor.Distance)
+                {
+                    int oldPriority = neighbor.SearchPriority;
+                    neighbor.Distance = distance;
+                    neighbor.PathFrom = current;
+                    searchOpenNodes.Change(neighbor, oldPriority);
+                }
+            }
+
+        }
+        return false;
+    }
+
+    void ClearPath()
+    {
+        if (currentPathExists)
+        {
+            HexCell current = currentPathTo;
+            while (current != currentPathFrom)
+            {
+                current.SetLabel(null);
+                current.DisableHighlight();
+                current = current.PathFrom;
+            }
+            current.DisableHighlight();
+            currentPathExists = false;
+        }
+        currentPathFrom = currentPathTo = null;
+    }
+    void ShowPath(int speed)
+    {
+        if (currentPathExists)
+        {
+            HexCell current = currentPathTo;
+            while (current != currentPathFrom)
+            {
+                int turn = current.Distance / speed;
+                current.SetLabel(turn.ToString());
+                current.EnableHighlight(Color.white);
+                current = current.PathFrom;
+            }
+        }
+        currentPathFrom.EnableHighlight(Color.blue);
+        currentPathTo.EnableHighlight(Color.red);
+    }
+
     public void Save(BinaryWriter writer)
     {
         writer.Write(cellCountX);
@@ -189,9 +322,9 @@ public class HexGrid : MonoBehaviour
             cells[i].Save(writer);
         }
     }
-
     public void Load(BinaryReader reader, int header)
     {
+        ClearPath();
         int x = 20, z = 15;
         if (header >= 1)
         {

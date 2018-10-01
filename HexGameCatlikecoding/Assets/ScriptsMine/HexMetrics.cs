@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public static class HexMetrics
 {
@@ -208,8 +209,6 @@ public struct HexCoordinates
     {
         return new HexCoordinates(x - z / 2, z);
     }
-
-
     public static HexCoordinates FromPosition(Vector3 position)
     {
         float x = position.x / (HexMetrics.innerRadius * 2f);
@@ -243,6 +242,14 @@ public struct HexCoordinates
         return new HexCoordinates(iX, iZ);
     }
 
+    public int DistanceTo(HexCoordinates other)
+    {
+        return
+            ((x < other.x ? other.x - x : x - other.x) +
+            (Y < other.Y ? other.Y - Y : Y - other.Y) +
+            (z < other.z ? other.z - z : z - other.z)) / 2;
+    }
+
     [SerializeField]
     private int x, z;
 
@@ -253,7 +260,6 @@ public struct HexCoordinates
             return x;
         }
     }
-
     public int Y
     {
         get
@@ -261,7 +267,6 @@ public struct HexCoordinates
             return -X - Z;
         }
     }
-
     public int Z
     {
         get
@@ -275,10 +280,82 @@ public struct HexCoordinates
     {
         return "(" + X.ToString() + ", " + Y.ToString() + ", " + Z.ToString() + ")";
     }
-
     public string ToStringOnSeparateLines()
     {
         return X.ToString() + "\n" + Y.ToString() + "\n" + Z.ToString();
+    }
+}
+
+public class HexCellPriorityQueue
+{
+    List<HexCell> list = new List<HexCell>();
+    int minimum = int.MaxValue;
+
+    int count = 0;
+    public int Count
+    {
+        get
+        {
+            return count;
+        }
+    }
+
+
+    public void Enqueue(HexCell cell)
+    {
+        count += 1;
+        int priority = cell.SearchPriority;
+        if (priority < minimum)
+            minimum = priority;
+
+        while (priority >= list.Count)
+            list.Add(null);
+
+        cell.NextWithSamePriority = list[priority];
+        list[priority] = cell;
+    }
+
+    public HexCell Dequeue()
+    {
+        count -= 1;
+        for (; minimum < list.Count; minimum++)
+        {
+            HexCell cell = list[minimum];
+            if (cell != null)
+            {
+                list[minimum] = cell.NextWithSamePriority;
+                return cell;
+            }
+        }
+        return null;
+    }
+
+    public void Change(HexCell cell, int oldPriority)
+    {
+        HexCell current = list[oldPriority];
+        HexCell next = current.NextWithSamePriority;
+        if (current == null)
+        {
+            list[oldPriority] = next;
+        }
+        else
+        {
+            while(next != current)
+            {
+                current = next;
+                next = current.NextWithSamePriority;
+            }
+            current.NextWithSamePriority = cell.NextWithSamePriority;
+            Enqueue(cell);
+            count -= 1;
+        }
+    }
+
+    public void Clear()
+    {
+        list.Clear();
+        count = 0;
+        minimum = int.MaxValue;
     }
 }
 

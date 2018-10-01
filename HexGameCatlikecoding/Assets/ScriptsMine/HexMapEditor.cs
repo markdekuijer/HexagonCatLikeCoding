@@ -4,6 +4,9 @@ using UnityEngine.EventSystems;
 
 public class HexMapEditor : MonoBehaviour
 {
+    public Material terrainMaterial;
+    bool editMode;
+
     public HexGrid hexGrid;
     int activeTerrainTypeIndex;
 
@@ -31,7 +34,13 @@ public class HexMapEditor : MonoBehaviour
 
     bool isDrag;
     HexDirection dragDirection;
-    HexCell previousCell;
+    HexCell previousCell, searchFromCell, searchToCell;
+
+    void Awake()
+    {
+        terrainMaterial.DisableKeyword("GRID_ON");
+        ShowGrid(false);
+    }
 
     void Update()
     {
@@ -52,15 +61,41 @@ public class HexMapEditor : MonoBehaviour
         if (Physics.Raycast(inputRay, out hit))
         {
             HexCell currentCell = hexGrid.GetCell(hit.point);
+
             if(previousCell && previousCell != currentCell)
-            {
                 ValidateDrag(currentCell);
-            }
             else
-            {
                 isDrag = false;
+
+            if (editMode)
+            {
+                EditCells(currentCell);
             }
-            EditCells(hexGrid.GetCell(hit.point));
+            else if (Input.GetKey(KeyCode.LeftShift) && searchToCell != currentCell)
+            {
+                if (searchFromCell != currentCell)
+                {
+                    if (searchFromCell)
+                        searchFromCell.DisableHighlight();
+
+                    searchFromCell = currentCell;
+                    searchFromCell.EnableHighlight(Color.blue);
+
+                    if (searchToCell)
+                    {
+                        hexGrid.FindPath(searchFromCell, searchToCell, 24);
+                    }
+                }
+            }
+            else if (searchFromCell && searchFromCell != currentCell)
+            {
+                if(searchToCell != currentCell)
+                {
+                    searchToCell = currentCell;
+                    hexGrid.FindPath(searchFromCell, currentCell, 24);
+                }
+            }
+
             previousCell = currentCell;
             isDrag = true;
         }
@@ -174,11 +209,6 @@ public class HexMapEditor : MonoBehaviour
         brushSize = (int)size;
     }
 
-    public void ShowUI(bool visible)
-    {
-        hexGrid.ShowUI(visible);
-    }
-
     public void SetApplyWaterLevel(bool toggle)
     {
         applyWaterLevel = toggle;
@@ -224,6 +254,18 @@ public class HexMapEditor : MonoBehaviour
         activeSpecialIndex = (int)index;
     }
 
+    public void ShowGrid(bool visible)
+    {
+        if (visible)
+            terrainMaterial.EnableKeyword("GRID_ON");
+        else
+            terrainMaterial.DisableKeyword("GRID_ON");
+    }
+    public void SetEditMode(bool toggle)
+    {
+        editMode = toggle;
+        hexGrid.ShowUI(!toggle);
+    }
 }
 
 public enum OptionalToggle

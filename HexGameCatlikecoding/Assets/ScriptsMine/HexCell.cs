@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using System.IO;
+﻿using System.IO;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class HexCell : MonoBehaviour
 {
@@ -286,6 +287,32 @@ public class HexCell : MonoBehaviour
         }
     }
 
+    int distance;
+    public int Distance
+    {
+        get
+        {
+            return distance;
+        }
+        set
+        {
+            distance = value;
+            //UpdateDistanceLabel();
+        }
+    }
+
+    public HexCell PathFrom { get; set; }
+    public int SearchHeuristic { get; set; }
+    public int SearchPriority
+    {
+        get
+        {
+            return distance + SearchHeuristic;
+        }
+    }
+    public HexCell NextWithSamePriority { get; set; }
+    public int SearchPhase { get; set; }
+
     #region rivers
     public void SetOutgoingRiver(HexDirection direction)
     {
@@ -426,6 +453,29 @@ public class HexCell : MonoBehaviour
     }
     #endregion
 
+    //void UpdateDistanceLabel()  disable SetLabel when using this method
+    //{
+    //    Text label = uiRect.GetComponent<Text>();
+    //    label.text = distance == int.MaxValue ? "" : distance.ToString();
+    //}
+    public void SetLabel(string text)
+    {
+        Text Label = uiRect.GetComponent<Text>();
+        Label.text = text;
+    }
+
+    public void DisableHighlight()
+    {
+        Image highlight = uiRect.GetChild(0).GetComponent<Image>();
+        highlight.enabled = false;
+    }
+    public void EnableHighlight(Color color)
+    {
+        Image highlight = uiRect.GetChild(0).GetComponent<Image>();
+        highlight.color = color;
+        highlight.enabled = true;
+    }
+
     public void Save(BinaryWriter writer)
     {
         writer.Write((byte)terrainTypeIndex);
@@ -455,7 +505,6 @@ public class HexCell : MonoBehaviour
         }
         writer.Write((byte)roadFlags);
     }
-
     public void Load(BinaryReader reader)
     {
         terrainTypeIndex = reader.ReadByte();
