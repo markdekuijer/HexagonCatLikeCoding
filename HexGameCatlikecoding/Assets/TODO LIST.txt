@@ -1,0 +1,20 @@
+gamedesign:
+
+declare war with enemy faction;
+exploration for own city upgrade;
+town upgrades
+
+new camera;
+more heights in map to make like a mountain part to play in
+watch video called wartile again
+
+loot and resources
+fix enemy ai vision
+make fighting(think about how in form of game design)
+fix movement;
+
+character stats
+character types (scout, offensive, defensive(maybe), miners)
+
+maybe auto walk to further point ahead so you dont need to click again;
+think about fog of war;
