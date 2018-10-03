@@ -19,9 +19,13 @@ public class HexUnit : MonoBehaviour
         set
         {
             if (location)
+            {
+                location.DecreaseVisibility();
                 location.Unit = null;
+            }
             location = value;
             value.Unit = this;
+            location.IncreaseVisibility();
             transform.localPosition = value.Position;
         }
     }
@@ -159,6 +163,10 @@ public class HexUnit : MonoBehaviour
 
     public void Die()
     {
+        if (location) //TODO remove this to keep location
+        {
+            location.DecreaseVisibility();
+        }
         location.Unit = null;
         Destroy(gameObject);
     }

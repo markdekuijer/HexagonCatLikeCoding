@@ -297,6 +297,74 @@ public class HexGrid : MonoBehaviour
         return false;
     }
 
+    List<HexCell> GetVisibleCells(HexCell fromCell, int range)
+    {
+        List<HexCell> visibleCells = ListPool<HexCell>.Get();
+
+        searchOpenNodesPhase += 2;
+
+        if (searchOpenNodes == null)
+            searchOpenNodes = new HexCellPriorityQueue();
+        else
+            searchOpenNodes.Clear();
+
+        fromCell.SearchPhase = searchOpenNodesPhase;
+        fromCell.Distance = 0;
+        searchOpenNodes.Enqueue(fromCell);
+
+        while (searchOpenNodes.Count > 0)
+        {
+            HexCell current = searchOpenNodes.Dequeue();
+            current.SearchPhase += 1;
+            visibleCells.Add(current);
+
+            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+            {
+                HexCell neighbor = current.GetNeighbor(d);
+                if (neighbor == null || neighbor.SearchPhase > searchOpenNodesPhase)
+                    continue;
+
+                int distance = current.Distance + 1;
+                if (distance > range)
+                    continue;
+
+                if (neighbor.SearchPhase < searchOpenNodesPhase)
+                {
+                    neighbor.SearchPhase = searchOpenNodesPhase;
+                    neighbor.Distance = distance;
+                    neighbor.SearchHeuristic = 0;
+                    searchOpenNodes.Enqueue(neighbor);
+                }
+                else if (distance < neighbor.Distance)
+                {
+                    int oldPriority = neighbor.SearchPriority;
+                    neighbor.Distance = distance;
+                    searchOpenNodes.Change(neighbor, oldPriority);
+                }
+            }
+
+        }
+        return visibleCells;
+    }
+    public void IncreaseVisibility(HexCell fromCell, int range)
+    {
+        List<HexCell> cells = GetVisibleCells(fromCell, range);
+        for (int i = 0; i < cells.Count; i++)
+        {
+            cells[i].IncreaseVisibility();
+        }
+        ListPool<HexCell>.Add(cells);
+    }
+    public void DecreaseVisibility(HexCell fromCell, int range)
+    {
+        List<HexCell> cells = GetVisibleCells(fromCell, range);
+        for (int i = 0; i < cells.Count; i++)
+        {
+            cells[i].DecreaseVisibility();
+        }
+        ListPool<HexCell>.Add(cells);
+    }
+
     public List<HexCell> GetPath()
     {
         if (!currentPathExists)

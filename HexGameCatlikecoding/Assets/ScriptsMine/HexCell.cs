@@ -315,7 +315,17 @@ public class HexCell : MonoBehaviour
     public int SearchPhase { get; set; }
 
     public HexUnit Unit { get; set; }
+
     public HexCellShaderData ShaderData { get; set; }
+
+    int visibility;
+    public bool IsVisible
+    {
+        get
+        {
+            return visibility > 0;
+        }
+    }
 
     #region rivers
     public void SetOutgoingRiver(HexDirection direction)
@@ -478,6 +488,17 @@ public class HexCell : MonoBehaviour
         Image highlight = uiRect.GetChild(0).GetComponent<Image>();
         highlight.color = color;
         highlight.enabled = true;
+    }
+
+    public void IncreaseVisibility()
+    {
+        visibility += 1;
+        ShaderData.RefreshVisibility(this);
+    }
+    public void DecreaseVisibility()
+    {
+        visibility -= 1;
+        ShaderData.RefreshVisibility(this);
     }
 
     public void Save(BinaryWriter writer)
