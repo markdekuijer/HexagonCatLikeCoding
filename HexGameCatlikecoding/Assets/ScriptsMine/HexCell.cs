@@ -17,6 +17,7 @@ public class HexCell : MonoBehaviour
             return transform.localPosition;
         }
     }
+    public int Index { get; set; }
 
     int elevation = int.MinValue;
     public int Elevation
@@ -70,7 +71,7 @@ public class HexCell : MonoBehaviour
             if (terrainTypeIndex != value)
             {
                 terrainTypeIndex = value;
-                Refresh();
+                ShaderData.RefreshTerrain(this);
             }
         }
     }
@@ -314,6 +315,7 @@ public class HexCell : MonoBehaviour
     public int SearchPhase { get; set; }
 
     public HexUnit Unit { get; set; }
+    public HexCellShaderData ShaderData { get; set; }
 
     #region rivers
     public void SetOutgoingRiver(HexDirection direction)
@@ -510,6 +512,7 @@ public class HexCell : MonoBehaviour
     public void Load(BinaryReader reader)
     {
         terrainTypeIndex = reader.ReadByte();
+        ShaderData.RefreshTerrain(this);
         elevation = reader.ReadByte();
         RefreshPosition();
         waterLevel = reader.ReadByte();
