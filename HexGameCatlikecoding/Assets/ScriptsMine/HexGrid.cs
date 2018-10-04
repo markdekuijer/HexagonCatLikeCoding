@@ -206,20 +206,21 @@ public class HexGrid : MonoBehaviour
         chunk.AddCell(localX + localZ * HexMetrics.chunkSizeX, cell);
     }
 
-    public void FindPath(HexCell fromCell, HexCell toCell, int speed)
+    public void FindPath(HexCell fromCell, HexCell toCell, HexUnit unit)
     {
         System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
         sw.Start();
         ClearPath();
         currentPathFrom = fromCell;
         currentPathTo = toCell;
-        currentPathExists = Search(fromCell, toCell, speed);
-        ShowPath(speed);
+        currentPathExists = Search(fromCell, toCell, unit);
+        ShowPath(unit.Speed);
         sw.Stop();
         print(sw.ElapsedMilliseconds);
     }
-    bool Search(HexCell fromCell, HexCell toCell, int speed)
+    bool Search(HexCell fromCell, HexCell toCell, HexUnit unit)
     {
+        int speed = unit.Speed;
         searchOpenNodesPhase += 2;
 
         if (searchOpenNodes == null)
@@ -248,27 +249,12 @@ public class HexGrid : MonoBehaviour
                 HexCell neighbor = current.GetNeighbor(d);
                 if (neighbor == null || neighbor.SearchPhase > searchOpenNodesPhase) 
                     continue;
-                if (neighbor.IsUnderWater || neighbor.Unit)
-                    continue;
 
-                HexEdgeType edgeType = current.GetEdgeType(neighbor);
-                if (edgeType == HexEdgeType.Cliff)
+                if (!unit.IsValidDestination(neighbor))
                     continue;
-
-                int moveCost = 0;
-                if (current.HasRoadThroughEdge(d))
-                {
-                    moveCost += 1;
-                }
-                else if (current.Walled != neighbor.Walled)
-                {
+                int moveCost = unit.GetMoveCost(current, neighbor, d);
+                if (moveCost < 0)
                     continue;
-                }
-                else
-                {
-                    moveCost += edgeType == HexEdgeType.Flat ? 5 : 10;
-                    moveCost += neighbor.UrbanLevel + neighbor.FarmLevel + neighbor.PlantLevel;
-                }
 
                 int distance = current.Distance + moveCost;
                 int turn = (distance - 1) / speed;
@@ -474,7 +460,7 @@ public class HexGrid : MonoBehaviour
 
         for (int i = 0; i < cells.Length; i++)
         {
-            cells[i].Load(reader);
+            cells[i].Load(reader, header);
         }
 
         for (int i = 0; i < chunks.Length; i++)

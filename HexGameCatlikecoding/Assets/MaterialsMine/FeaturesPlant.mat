@@ -30,4 +30,6 @@ Material:
     - _Glossiness: 0.5
     - _Metallic: 0
     m_Colors:
+    - _BackgroundColor: {r: 0.40784314, g: 0.38039216, b: 0.35686275, a: 1}
     - _Color: {r: 0, g: 0.654902, b: 0.24705882, a: 1}
+    - _Specular: {r: 0.2, g: 0.2, b: 0.2, a: 1}

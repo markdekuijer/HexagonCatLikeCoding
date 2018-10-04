@@ -47,6 +47,13 @@ public class HexUnit : MonoBehaviour
 
     public HexGrid Grid { get; set; }
 
+    public int Speed
+    {
+        get
+        {
+            return 24;
+        }
+    }
     const int visionRange = 3;
 
     public void ValidatePosition()
@@ -55,7 +62,7 @@ public class HexUnit : MonoBehaviour
     }
     public bool IsValidDestination(HexCell cell)
     {
-        return !cell.IsUnderWater && !cell.Unit;
+        return cell.IsExplored && !cell.IsUnderWater && !cell.Unit;
     }
 
     private void OnEnable()
@@ -72,6 +79,29 @@ public class HexUnit : MonoBehaviour
         }
     }
 
+    public int GetMoveCost(HexCell fromCell, HexCell toCell, HexDirection direciton)
+    {
+        HexEdgeType edgeType = fromCell.GetEdgeType(direciton);
+        if(edgeType == HexEdgeType.Cliff)
+        {
+            return -1;
+        }
+        int moveCost;
+        if (fromCell.HasRoadThroughEdge(direciton))
+        {
+            moveCost = 1;
+        }
+        else if (fromCell.Walled != toCell.Walled)
+        {
+            return -1;
+        }
+        else
+        {
+            moveCost = edgeType == HexEdgeType.Flat ? 5 : 10;
+            moveCost += toCell.UrbanLevel + toCell.PlantLevel + toCell.FarmLevel;
+        }
+        return moveCost;
+    }
     public void Travel(List<HexCell> path)
     {
         location.Unit = null;
