@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.43896195, g: 0.48717737, b: 0.5674391, a: 1}
+  m_IndirectSpecularColor: {r: 0.4389618, g: 0.48717725, b: 0.567439, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -6537,7 +6537,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'UrbanLevel
+  m_Text: 'PlantLevel
 
 '
 --- !u!222 &993118959

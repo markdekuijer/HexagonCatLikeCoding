@@ -12,6 +12,7 @@
 		CGPROGRAM
 		#pragma surface surf Standard alpha // fullforwardshadows
 		#pragma target 3.0
+		#pragma multi_compile_HEX_MAP_EDIT_MODE
 
 		#include "Water.cginc"
 

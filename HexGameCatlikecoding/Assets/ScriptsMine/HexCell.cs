@@ -317,6 +317,7 @@ public class HexCell : MonoBehaviour
     public HexUnit Unit { get; set; }
 
     public HexCellShaderData ShaderData { get; set; }
+    public bool IsExplored { get; private set; }
 
     int visibility;
     public bool IsVisible

@@ -396,7 +396,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 27c35944105ac0e46858fa319dfe3301, type: 2}
+  - {fileID: 2100000, guid: 5073fb9880064e94e9e258094bb41f6a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -654,7 +654,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useCollider: 0
-  useCellData: 0
+  useCellData: 1
   useUVcoordinates: 1
   useUV2coordinates: 0
 --- !u!114 &114101098961714266
@@ -750,7 +750,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useCollider: 0
-  useCellData: 0
+  useCellData: 1
   useUVcoordinates: 0
   useUV2coordinates: 0
 --- !u!114 &114513991491557346
@@ -765,7 +765,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useCollider: 0
-  useCellData: 0
+  useCellData: 1
   useUVcoordinates: 1
   useUV2coordinates: 0
 --- !u!114 &114752036998531874
@@ -780,7 +780,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useCollider: 0
-  useCellData: 0
+  useCellData: 1
   useUVcoordinates: 0
   useUV2coordinates: 0
 --- !u!114 &114883636741786924
@@ -816,7 +816,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useCollider: 0
-  useCellData: 0
+  useCellData: 1
   useUVcoordinates: 1
   useUV2coordinates: 0
 --- !u!114 &114954687330373866
@@ -831,7 +831,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useCollider: 0
-  useCellData: 0
+  useCellData: 1
   useUVcoordinates: 1
   useUV2coordinates: 1
 --- !u!223 &223637781300719124

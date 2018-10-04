@@ -415,6 +415,7 @@ public class HexGrid : MonoBehaviour
     public void AddUnit(HexUnit unit, HexCell location, float orientation)
     {
         units.Add(unit);
+        unit.Grid = this;   
         unit.transform.SetParent(transform, false);
         unit.Location = location;
         unit.Orientation = orientation;
