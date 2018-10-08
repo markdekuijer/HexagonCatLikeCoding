@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class HexGameUI : MonoBehaviour
 {
@@ -7,6 +8,8 @@ public class HexGameUI : MonoBehaviour
 
     HexCell currentCell;
     HexUnit selectedUnit;
+
+    List<HexCell> cellsToHighlights = new List<HexCell>();
 
     private void Update()
     {
@@ -19,9 +22,14 @@ public class HexGameUI : MonoBehaviour
             else if (selectedUnit)
             {
                 if (Input.GetMouseButtonDown(1))
-                    DoMove();
+                    DoMove(selectedUnit.Speed);
                 else
                     DoPathfinding();
+            }
+            else if (Input.GetMouseButtonDown(2))
+            {
+                grid.ClearPath();
+                grid.SearchMovementArea(GetCell(), 20);
             }
         }
     }
@@ -53,12 +61,22 @@ public class HexGameUI : MonoBehaviour
         return false;
     }
 
+    HexCell GetCell()
+    {
+        HexCell cell = grid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition));
+        return cell;
+    }
+
     void DoSelect()
     {
         grid.ClearPath();
         UpdateCurrentCell();
         if (currentCell)
+        {
             selectedUnit = currentCell.Unit;
+            cellsToHighlights.Clear();
+            cellsToHighlights = grid.SearchMovementArea(selectedUnit.Location, selectedUnit.Speed); //selectedUnit.Speed);
+        }
     }
 
     void DoPathfinding()
@@ -66,18 +84,24 @@ public class HexGameUI : MonoBehaviour
         if (UpdateCurrentCell())
         {
             if (currentCell && selectedUnit.IsValidDestination(currentCell))
-                grid.FindPath(selectedUnit.Location, currentCell, selectedUnit);
+                grid.FindPath(selectedUnit.Location, currentCell, selectedUnit, cellsToHighlights);
             else
                 grid.ClearPath();
         }
     }
 
-    void DoMove()
+    void DoMove(int speed)
     {
         if (grid.HasPath)
         {
-            selectedUnit.Travel(grid.GetPath());
+            for (int i = 0; i < cellsToHighlights.Count; i++)
+            {
+                cellsToHighlights[i].DisableHighlight();
+            }
+            cellsToHighlights.Clear();
+            selectedUnit.Travel(grid.GetPath(speed));
             grid.ClearPath();
+            selectedUnit = null;
         }
     }
 }
