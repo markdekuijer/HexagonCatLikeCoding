@@ -12,7 +12,8 @@
 		CGPROGRAM
 		#pragma surface surf StandardSpecular alpha vertex:vert// fullforwardshadows
 		#pragma target 3.0
-		#pragma multi_compile_HEX_MAP_EDIT_MODE
+
+		#pragma multi_compile _ HEX_MAP_EDIT_MODE
 
 		#include "Water.cginc"
 		#include "HexCellData.cginc"

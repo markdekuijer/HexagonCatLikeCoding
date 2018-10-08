@@ -44,6 +44,7 @@ public class HexGrid : MonoBehaviour
         HexUnit.unitPrefab = unitPrefab;
 
         cellShaderData = gameObject.AddComponent<HexCellShaderData>();
+        cellShaderData.Grid = this;
         CreateMap(cellCountX, cellCountZ);
     }
 
@@ -54,6 +55,7 @@ public class HexGrid : MonoBehaviour
             HexMetrics.noiseSource = noiseSource;
             HexMetrics.InitializeHashGrid(seed);
             HexUnit.unitPrefab = unitPrefab;
+            ResetVisibility();
         }
     }
 
@@ -161,6 +163,8 @@ public class HexGrid : MonoBehaviour
         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
         cell.Index = i;
         cell.ShaderData = cellShaderData;
+
+        cell.Explorable = x > 0 && z > 0 && x < cellCountX - 1 && z < cellCountZ - 1;
 
         if (x > 0)
         {
@@ -294,10 +298,12 @@ public class HexGrid : MonoBehaviour
         else
             searchOpenNodes.Clear();
 
+        range += fromCell.ViewElevation;
         fromCell.SearchPhase = searchOpenNodesPhase;
         fromCell.Distance = 0;
         searchOpenNodes.Enqueue(fromCell);
 
+        HexCoordinates fromCoordinates = fromCell.coordinates;
         while (searchOpenNodes.Count > 0)
         {
             HexCell current = searchOpenNodes.Dequeue();
@@ -307,11 +313,11 @@ public class HexGrid : MonoBehaviour
             for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
             {
                 HexCell neighbor = current.GetNeighbor(d);
-                if (neighbor == null || neighbor.SearchPhase > searchOpenNodesPhase)
+                if (neighbor == null || neighbor.SearchPhase > searchOpenNodesPhase || !neighbor.Explorable) //TODO explorable goes wrong on large map
                     continue;
 
                 int distance = current.Distance + 1;
-                if (distance > range)
+                if (distance + neighbor.ViewElevation > range || distance > fromCoordinates.DistanceTo(neighbor.coordinates))
                     continue;
 
                 if (neighbor.SearchPhase < searchOpenNodesPhase)
@@ -349,6 +355,18 @@ public class HexGrid : MonoBehaviour
             cells[i].DecreaseVisibility();
         }
         ListPool<HexCell>.Add(cells);
+    }
+    public void ResetVisibility()
+    {
+        for (int i = 0; i < cells.Length; i++)
+        {
+            cells[i].ResetVisibility();
+        }
+        for (int i = 0; i < units.Count; i++)
+        {
+            HexUnit unit = units[i];
+            IncreaseVisibility(unit.Location, unit.VisionRange);
+        }
     }
 
     public List<HexCell> GetPath()
@@ -458,6 +476,9 @@ public class HexGrid : MonoBehaviour
             if (!CreateMap(x, z))
                 return;
 
+        bool originalImmediateMode = cellShaderData.ImmediateMode;
+        cellShaderData.ImmediateMode = true;
+
         for (int i = 0; i < cells.Length; i++)
         {
             cells[i].Load(reader, header);
@@ -476,6 +497,8 @@ public class HexGrid : MonoBehaviour
                 HexUnit.Load(reader, this);
             }
         }
+
+        cellShaderData.ImmediateMode = originalImmediateMode;
     }
 }
 

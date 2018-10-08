@@ -30,7 +30,11 @@ public class HexCell : MonoBehaviour
         {
             if (elevation == value)
                 return;
+
+            int originalViewElevation = ViewElevation;
             elevation = value;
+            if (ViewElevation != originalViewElevation)
+                ShaderData.ViewElevationChanged();
 
             RefreshPosition();
             ValidateRivers();
@@ -183,7 +187,11 @@ public class HexCell : MonoBehaviour
             if (waterLevel == value)
                 return;
 
+            int originalViewElevation = ViewElevation;
             waterLevel = value;
+            if (ViewElevation != originalViewElevation)
+                ShaderData.ViewElevationChanged();
+
             ValidateRivers();
             Refresh();
         }
@@ -315,18 +323,40 @@ public class HexCell : MonoBehaviour
     public int SearchPhase { get; set; }
 
     public HexUnit Unit { get; set; }
-
     public HexCellShaderData ShaderData { get; set; }
-    public bool IsExplored { get; private set; }
+
+    bool explored;
+    public bool IsExplored
+    {
+        get
+        {
+            return explored && Explorable;
+        }
+        private set
+        {
+            explored = value;
+        }
+    }
+    public bool Explorable { get; set; }
+    //TODO hier gaat wat mis op grate maps
 
     int visibility;
     public bool IsVisible
     {
         get
         {
-            return visibility > 0;
+            return visibility > 0 && Explorable;
         }
     }
+
+    public int ViewElevation
+    {
+        get
+        {
+            return elevation >= WaterLevel ? elevation : waterLevel;
+        }
+    }
+
 
     #region rivers
     public void SetOutgoingRiver(HexDirection direction)
@@ -504,6 +534,14 @@ public class HexCell : MonoBehaviour
     {
         visibility -= 1;
         ShaderData.RefreshVisibility(this);
+    }
+    public void ResetVisibility()
+    {
+        if(visibility > 0)
+        {
+            visibility = 0;
+            ShaderData.RefreshVisibility(this);
+        }
     }
 
     public void Save(BinaryWriter writer)

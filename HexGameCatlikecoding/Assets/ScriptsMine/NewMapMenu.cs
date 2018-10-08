@@ -23,7 +23,7 @@ public class NewMapMenu : MonoBehaviour
 
     public void CreateLargeMap()
     {
-        CreateMap(80, 60);
+        CreateMap(150, 150);
     }
 
     public void Open()

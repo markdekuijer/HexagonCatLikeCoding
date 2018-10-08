@@ -8,7 +8,6 @@ float4 FilterCellData(float4 data)
 	#endif
 	return data;
 }
-
 float4 GetCellData (appdata_full v, int index) 
 {
 	float2 uv;

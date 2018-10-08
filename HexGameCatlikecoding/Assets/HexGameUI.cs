@@ -28,6 +28,7 @@ public class HexGameUI : MonoBehaviour
 
     public void SetEditMode(bool toggle)
     {
+        print("edit");
         enabled = !toggle;
         grid.ShowUI(!toggle);
         grid.ClearPath();
