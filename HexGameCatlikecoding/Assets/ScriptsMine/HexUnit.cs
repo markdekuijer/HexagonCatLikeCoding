@@ -10,6 +10,15 @@ public class HexUnit : MonoBehaviour
     const float rotationSpeed = 180f;
     List<HexCell> pathToTravel;
 
+    public bool IsTraveling
+    {
+        get
+        {
+            return isTraveling;
+        }
+    }
+    bool isTraveling;
+
     HexCell location, currentTravelLocation;
     public HexCell Location
     {
@@ -110,6 +119,7 @@ public class HexUnit : MonoBehaviour
     }
     public void Travel(List<HexCell> path)
     {
+
         location.Unit = null;
         location = path[path.Count - 1];
         location.Unit = this;
@@ -119,6 +129,7 @@ public class HexUnit : MonoBehaviour
     }
     IEnumerator TravelPath()
     {
+        isTraveling = true;
         Vector3 a, b, c = pathToTravel[0].Position;
         yield return LookAt(pathToTravel[1].Position);
         Grid.DecreaseVisibility(currentTravelLocation ? currentTravelLocation : pathToTravel[0], VisionRange);
@@ -162,6 +173,7 @@ public class HexUnit : MonoBehaviour
         orientation = transform.localRotation.eulerAngles.y;
         ListPool<HexCell>.Add(pathToTravel);
         pathToTravel = null;
+        isTraveling = false;
     }
     IEnumerator LookAt(Vector3 point)
     {

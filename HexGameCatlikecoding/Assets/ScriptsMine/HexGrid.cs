@@ -316,6 +316,10 @@ public class HexGrid : MonoBehaviour
                 {
                     continue;
                 }
+                if (!neighbor.Explorable || !neighbor.IsExplored)
+                {
+                    continue;
+                }
                 HexEdgeType edgeType = current.GetEdgeType(neighbor);
                 if (edgeType == HexEdgeType.Cliff)
                 {
@@ -493,9 +497,17 @@ public class HexGrid : MonoBehaviour
                     current.EnableHighlight(Color.grey);
                 current = current.PathFrom;
             }
+            currentPathTo.EnableHighlight(Color.red);
+        }
+        else
+        {
+            for (int i = 0; i < cellsToHighlight.Count; i++)
+            {
+                cellsToHighlight[i].EnableHighlight(Color.white);
+            }
+
         }
         currentPathFrom.EnableHighlight(Color.blue);
-        currentPathTo.EnableHighlight(Color.red);
     }
 
     public void AddUnit(HexUnit unit, HexCell location, float orientation)

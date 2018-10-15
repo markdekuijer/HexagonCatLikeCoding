@@ -73,9 +73,14 @@ public class HexGameUI : MonoBehaviour
         UpdateCurrentCell();
         if (currentCell)
         {
-            selectedUnit = currentCell.Unit;
-            cellsToHighlights.Clear();
-            cellsToHighlights = grid.SearchMovementArea(selectedUnit.Location, selectedUnit.Speed); //selectedUnit.Speed);
+            if (currentCell.Unit)
+            {
+                if (currentCell.Unit.IsTraveling)
+                    return;
+                selectedUnit = currentCell.Unit;
+                cellsToHighlights.Clear();
+                cellsToHighlights = grid.SearchMovementArea(selectedUnit.Location, selectedUnit.Speed);
+            }
         }
     }
 
