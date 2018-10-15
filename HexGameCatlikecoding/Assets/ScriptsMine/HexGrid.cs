@@ -286,8 +286,15 @@ public class HexGrid : MonoBehaviour
         }
         return false;
     }
+
+    [HideInInspector] public List<HexCell> attackableCells = new List<HexCell>();
+    [HideInInspector] public List<HexCell> bonusChecks = new List<HexCell>();
     public List<HexCell> SearchMovementArea(HexCell fromCell, int steps)
     {
+        attackableCells.Clear();
+        int attackRange = fromCell.Unit.attackRange;
+        List<HexCell> bonusChecks = new List<HexCell>();
+
         for (int i = 0; i < cells.Length; i++)
         {
             cells[i].Distance = int.MaxValue;
@@ -325,6 +332,13 @@ public class HexGrid : MonoBehaviour
                 {
                     continue;
                 }
+                if (neighbor.Unit)
+                {
+                    if (neighbor.Unit.isEnemy)
+                        attackableCells.Add(neighbor); //TODO extend this for ranged attacks (use int attackRange bovenaan deze void);
+
+                    continue;
+                }
                 int distance = current.Distance;
                 if (current.HasRoadThroughEdge(d))
                 {
@@ -342,6 +356,7 @@ public class HexGrid : MonoBehaviour
                 }
                 if(distance > steps)
                 {
+                    bonusChecks.Add(neighbor);
                     continue;
                 }
                 if (neighbor.Distance == int.MaxValue)
@@ -359,6 +374,82 @@ public class HexGrid : MonoBehaviour
                 {
                     neighbor.Distance = distance;
                     neighbor.PathFrom = current;
+                }
+                frontier.Sort((x, y) => x.Distance.CompareTo(y.Distance));
+            }
+        }
+        //for (int i = 0; i < bonusChecks.Count; i++)
+        //{
+        //    List<HexCell> anotherLoop = searchAttackArea(bonusChecks[i], 2);
+        //    for (int j = 0; j < anotherLoop.Count; j++)
+        //    {
+        //        attackableCells.Add(anotherLoop[i]);
+        //    }
+        //}
+
+        return cellsToHighlight;
+    }
+    public List<HexCell> searchAttackArea(HexCell fromCell, int range)
+    {
+        for (int i = 0; i < cells.Length; i++)
+        {
+            cells[i].Distance = int.MaxValue;
+            cells[i].DisableHighlight();
+        }
+
+        List<HexCell> frontier = new List<HexCell>();
+        List<HexCell> cellsToHighlight = new List<HexCell>();
+        fromCell.Distance = 0;
+        frontier.Add(fromCell);
+        cellsToHighlight.Add(fromCell);
+        while (frontier.Count > 0)
+        {
+            HexCell current = frontier[0];
+            frontier.RemoveAt(0);
+
+            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+            {
+                HexCell neighbor = current.GetNeighbor(d);
+                if (neighbor == null)
+                {
+                    continue;
+                }
+                if (neighbor.IsUnderWater)
+                {
+                    continue;
+                }
+                if (!neighbor.Explorable || !neighbor.IsExplored)
+                {
+                    continue;
+                }
+                HexEdgeType edgeType = current.GetEdgeType(neighbor);
+                if (edgeType == HexEdgeType.Cliff)
+                {
+                    continue;
+                }
+                int distance = current.Distance;
+                if (current.Walled != neighbor.Walled)
+                {
+                    continue;
+                }
+                else
+                {
+                    distance += 1;
+                }
+                if (distance > range)
+                {
+                    continue;
+                }
+                if (neighbor.Distance == int.MaxValue)
+                {
+                    neighbor.Distance = distance;
+                    neighbor.PathFrom = current;
+                    if (neighbor.Explorable)
+                    {
+                        neighbor.EnableHighlight(Color.white);
+                        cellsToHighlight.Add(neighbor);
+                    }
+                    frontier.Add(neighbor);
                 }
                 frontier.Sort((x, y) => x.Distance.CompareTo(y.Distance));
             }
@@ -510,9 +601,10 @@ public class HexGrid : MonoBehaviour
         currentPathFrom.EnableHighlight(Color.blue);
     }
 
-    public void AddUnit(HexUnit unit, HexCell location, float orientation)
+    public void AddUnit(HexUnit unit, HexCell location, float orientation, bool isEnemy = false)
     {
         units.Add(unit);
+        unit.isEnemy = isEnemy;
         unit.Grid = this;   
         unit.transform.SetParent(transform, false);
         unit.Location = location;

@@ -18,9 +18,16 @@ public class HexGameUI : MonoBehaviour
             if (selectedUnit)
             {
                 if (Input.GetMouseButtonDown(0))
-                    DoMove(selectedUnit.Speed);
-                else
+                {
+                    if (!selectedUnit.hasMovedThisTurn)
+                        DoMove(selectedUnit.Speed);
+                    else if (!selectedUnit.hasAttackThisTurn)
+                        DoAttack(GetCell());
+                }
+                else if (!selectedUnit.hasMovedThisTurn)
+                {
                     DoPathfinding();
+                }
             }
             else if (Input.GetMouseButtonDown(0) && !selectedUnit)
             {
@@ -30,7 +37,14 @@ public class HexGameUI : MonoBehaviour
             if (Input.GetMouseButtonDown(1))
             {
                 selectedUnit = null;
-                grid.ClearPath();
+                for (int i = 0; i < cellsToHighlights.Count; i++)
+                {
+                    cellsToHighlights[i].DisableHighlight();
+                }
+                for (int i = 0; i < grid.attackableCells.Count; i++)
+                {
+                    grid.attackableCells[i].DisableHighlight();
+                }
             }
             else if (Input.GetMouseButtonDown(2))
             {
@@ -81,16 +95,30 @@ public class HexGameUI : MonoBehaviour
         {
             if (currentCell.Unit)
             {
-                if (currentCell.Unit.IsTraveling)
+                if (currentCell.Unit.IsTraveling || currentCell.Unit.isEnemy)
                     return;
 
                 selectedUnit = currentCell.Unit;
                 cellsToHighlights.Clear();
 
                 if (!selectedUnit.hasMovedThisTurn)
+                {
                     cellsToHighlights = grid.SearchMovementArea(selectedUnit.Location, selectedUnit.Speed);
+                    for (int i = 0; i < grid.attackableCells.Count; i++)
+                    {
+                        grid.attackableCells[i].EnableHighlight(Color.black);
+                    }
+                }
                 else if (!selectedUnit.hasAttackThisTurn)
-                    cellsToHighlights = grid.SearchMovementArea(selectedUnit.Location, selectedUnit.Speed);
+                {
+                    List<HexCell> showAttackRange = new List<HexCell>();
+                    showAttackRange = grid.searchAttackArea(selectedUnit.Location, selectedUnit.attackRange);
+
+                    for (int i = 0; i < showAttackRange.Count; i++)
+                    {
+                        showAttackRange[i].EnableHighlight(Color.black);
+                    }
+                }
                 else
                     cellsToHighlights = new List<HexCell>() { currentCell };
             }
@@ -102,9 +130,21 @@ public class HexGameUI : MonoBehaviour
         if (UpdateCurrentCell())
         {
             if (currentCell && selectedUnit.IsValidDestination(currentCell))
+            {
                 grid.FindPath(selectedUnit.Location, currentCell, selectedUnit, cellsToHighlights);
+            }
+            else if (grid.attackableCells.Contains(GetCell()))
+            {
+                print("can reach shorten path");
+            }
             else
+            {
                 grid.ClearPath();
+                for (int i = 0; i < cellsToHighlights.Count; i++)
+                {
+                    cellsToHighlights[i].EnableHighlight(Color.white);
+                }
+            }
         }
     }
 
@@ -120,6 +160,19 @@ public class HexGameUI : MonoBehaviour
             selectedUnit.Travel(grid.GetPath(speed));
             grid.ClearPath();
             selectedUnit = null;
+            for (int i = 0; i < grid.attackableCells.Count; i++)
+            {
+                grid.attackableCells[i].DisableHighlight();
+            }
         }
+    }
+
+    void DoAttack(HexCell cell)
+    {
+        if (!cell.Unit)
+            return;
+
+        if(cell.coordinates.DistanceTo(currentCell.coordinates) <= selectedUnit.attackRange)
+            selectedUnit.InitAttack(cell);
     }
 }

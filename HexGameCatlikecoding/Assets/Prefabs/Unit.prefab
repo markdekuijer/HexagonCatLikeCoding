@@ -2498,7 +2498,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdf78cc8d3ac8b54aa922d33213fcc89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hasMovedThisTurn: 0
+  hasAttackThisTurn: 0
+  isEnemy: 0
   animHandler: {fileID: 114903399399382300}
+  attackRange: 1
 --- !u!114 &114903399399382300
 MonoBehaviour:
   m_ObjectHideFlags: 1

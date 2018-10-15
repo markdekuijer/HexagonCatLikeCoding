@@ -12,6 +12,7 @@ public class HexUnit : MonoBehaviour
 
     public bool hasMovedThisTurn;
     public bool hasAttackThisTurn;
+    public bool isEnemy;
 
     public HexUnitAnimator animHandler;
 
@@ -125,7 +126,6 @@ public class HexUnit : MonoBehaviour
     }
     public void Travel(List<HexCell> path)
     {
-
         location.Unit = null;
         location = path[path.Count - 1];
         location.Unit = this;
@@ -185,6 +185,17 @@ public class HexUnit : MonoBehaviour
         hasMovedThisTurn = true;
         animHandler.SetWalking(isTraveling);
     }
+
+    public void InitAttack(HexCell cell)
+    {
+        StartCoroutine(Attack(cell));
+    }
+    IEnumerator Attack(HexCell attackedCell)
+    {
+        yield return LookAt(attackedCell.Position);
+        animHandler.InitAttack();
+    }
+
     IEnumerator LookAt(Vector3 point)
     {
         point.y = transform.localPosition.y;
@@ -221,11 +232,13 @@ public class HexUnit : MonoBehaviour
     {
         location.coordinates.Save(writer);
         writer.Write(orientation);
+        writer.Write(isEnemy);
     }
     public static void Load(BinaryReader reader, HexGrid grid)
     {
         HexCoordinates coordinates = HexCoordinates.Load(reader);
         float orientation = reader.ReadSingle();
-        grid.AddUnit(Instantiate(unitPrefab), grid.GetCell(coordinates), orientation);
+        bool isEnemy = reader.ReadBoolean();
+        grid.AddUnit(Instantiate(unitPrefab), grid.GetCell(coordinates), orientation, isEnemy);
     }
 }
