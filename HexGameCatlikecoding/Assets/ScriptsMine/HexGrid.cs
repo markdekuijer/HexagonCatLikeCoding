@@ -20,7 +20,7 @@ public class HexGrid : MonoBehaviour
     HexCell[] cells;
 
     public HexUnit unitPrefab;
-    List<HexUnit> units = new List<HexUnit>();
+    public List<HexUnit> units = new List<HexUnit>();
 
     HexCellPriorityQueue searchOpenNodes;
     int searchOpenNodesPhase;

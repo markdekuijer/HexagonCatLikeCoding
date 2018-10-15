@@ -15,16 +15,22 @@ public class HexGameUI : MonoBehaviour
     {
         if (!EventSystem.current.IsPointerOverGameObject())
         {
-            if (Input.GetMouseButtonDown(0))
+            if (selectedUnit)
             {
-                DoSelect();
-            }
-            else if (selectedUnit)
-            {
-                if (Input.GetMouseButtonDown(1))
+                if (Input.GetMouseButtonDown(0))
                     DoMove(selectedUnit.Speed);
                 else
                     DoPathfinding();
+            }
+            else if (Input.GetMouseButtonDown(0) && !selectedUnit)
+            {
+                DoSelect();
+            }
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                selectedUnit = null;
+                grid.ClearPath();
             }
             else if (Input.GetMouseButtonDown(2))
             {
@@ -77,9 +83,16 @@ public class HexGameUI : MonoBehaviour
             {
                 if (currentCell.Unit.IsTraveling)
                     return;
+
                 selectedUnit = currentCell.Unit;
                 cellsToHighlights.Clear();
-                cellsToHighlights = grid.SearchMovementArea(selectedUnit.Location, selectedUnit.Speed);
+
+                if (!selectedUnit.hasMovedThisTurn)
+                    cellsToHighlights = grid.SearchMovementArea(selectedUnit.Location, selectedUnit.Speed);
+                else if (!selectedUnit.hasAttackThisTurn)
+                    cellsToHighlights = grid.SearchMovementArea(selectedUnit.Location, selectedUnit.Speed);
+                else
+                    cellsToHighlights = new List<HexCell>() { currentCell };
             }
         }
     }

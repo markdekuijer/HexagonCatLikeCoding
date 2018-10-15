@@ -10,6 +10,11 @@ public class HexUnit : MonoBehaviour
     const float rotationSpeed = 180f;
     List<HexCell> pathToTravel;
 
+    public bool hasMovedThisTurn;
+    public bool hasAttackThisTurn;
+
+    public HexUnitAnimator animHandler;
+
     public bool IsTraveling
     {
         get
@@ -70,6 +75,7 @@ public class HexUnit : MonoBehaviour
             return 3;
         }
     }
+    public int attackRange;
 
     public void ValidatePosition()
     {
@@ -132,6 +138,7 @@ public class HexUnit : MonoBehaviour
         isTraveling = true;
         Vector3 a, b, c = pathToTravel[0].Position;
         yield return LookAt(pathToTravel[1].Position);
+        animHandler.SetWalking(isTraveling);
         Grid.DecreaseVisibility(currentTravelLocation ? currentTravelLocation : pathToTravel[0], VisionRange);
 
         float t = Time.deltaTime * travelSpeed;
@@ -172,8 +179,11 @@ public class HexUnit : MonoBehaviour
         transform.localPosition = location.Position;
         orientation = transform.localRotation.eulerAngles.y;
         ListPool<HexCell>.Add(pathToTravel);
+
         pathToTravel = null;
         isTraveling = false;
+        hasMovedThisTurn = true;
+        animHandler.SetWalking(isTraveling);
     }
     IEnumerator LookAt(Vector3 point)
     {
@@ -197,36 +207,6 @@ public class HexUnit : MonoBehaviour
         orientation = transform.localRotation.eulerAngles.y;
     }
 
-    //private void OnDrawGizmos()
-    //{
-    //    if(pathToTravel == null || pathToTravel.Count == 0)
-    //    {
-    //        return;
-    //    }
-
-    //    Vector3 a, b, c = pathToTravel[0].Position;
-
-    //    for (int i = 1; i < pathToTravel.Count; i++)
-    //    {
-    //        a = c;
-    //        b = pathToTravel[i - 1].Position;
-    //        c = (b + pathToTravel[i].Position) * 0.5f;
-
-    //        for (float t = 0; t < 1; t+= 0.1f)
-    //        {
-    //            Gizmos.DrawSphere(Bezier.GetPoint(a, b, c, t), 2);
-    //        }
-    //    }
-
-    //    a = c;
-    //    b = pathToTravel[pathToTravel.Count - 1].Position;
-    //    c = b;
-    //    for (float t = 0; t < 1; t += 0.1f)
-    //    {
-    //        Gizmos.DrawSphere(Bezier.GetPoint(a, b, c, t), 2);
-    //    }
-    //}
-
     public void Die()
     {
         if (location) //TODO remove this to keep location
@@ -234,7 +214,7 @@ public class HexUnit : MonoBehaviour
             Grid.DecreaseVisibility(location, VisionRange);
         }
         location.Unit = null;
-        Destroy(gameObject);
+        animHandler.Die();
     }
 
     public void Save(BinaryWriter writer)
