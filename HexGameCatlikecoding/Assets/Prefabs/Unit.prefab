@@ -2502,7 +2502,7 @@ MonoBehaviour:
   hasAttackThisTurn: 0
   isEnemy: 0
   animHandler: {fileID: 114903399399382300}
-  attackRange: 1
+  attackRange: 2
 --- !u!114 &114903399399382300
 MonoBehaviour:
   m_ObjectHideFlags: 1

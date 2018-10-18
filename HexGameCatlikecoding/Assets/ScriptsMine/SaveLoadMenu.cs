@@ -14,6 +14,11 @@ public class SaveLoadMenu : MonoBehaviour
 
     const int mapFileVersion = 3;
 
+    private void OnEnable()
+    {
+        Load(Path.Combine(Application.persistentDataPath, "NewFightArea.map"));
+    }
+
     string GetSelectedPath()
     {
         string mapName = nameInput.text;
@@ -69,6 +74,7 @@ public class SaveLoadMenu : MonoBehaviour
             else
                 Debug.LogWarning("Unknown map format " + header);
         }
+        Close(); // here for debugging
     }
 
     public void Delete()
@@ -123,7 +129,7 @@ public class SaveLoadMenu : MonoBehaviour
         }
         FillList();
         gameObject.SetActive(true);
-        HexMapCamera.Locked = true;
+        //HexMapCamera.Locked = true; // enable TODO debugging
     }
 
     public void Close()

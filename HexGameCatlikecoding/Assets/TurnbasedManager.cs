@@ -4,27 +4,53 @@ using UnityEngine;
 
 public class TurnbasedManager : MonoBehaviour
 {
-    [SerializeField] private HexGrid grid;
+    public static TurnbasedManager Instance;
+
+    public HexGrid grid;
+    public bool playerTurn;
 
     int currentTurn;
-	void Start ()
+
+    public List<HexUnit> enemyUnits = new List<HexUnit>();
+
+    private void Awake()
     {
-	}
-	
-	void Update ()
+        if (Instance == null)
+            Instance = this;
+    }
+
+    void Update ()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (playerTurn)
         {
+
+        }
+        else
+        {
+            for (int i = 0; i < enemyUnits.Count; i++)
+            {
+            }
             InitNextTurn();
         }
 	}
 
     public void InitNextTurn()
     {
-        for (int i = 0; i < grid.units.Count; i++)
+        playerTurn = !playerTurn;
+        if (playerTurn)
         {
-            grid.units[i].hasAttackThisTurn = false;
-            grid.units[i].hasAttackThisTurn = false;
+            for (int i = 0; i < grid.units.Count; i++)
+            {
+                print("Reset");
+                grid.units[i].hasMovedThisTurn = false;
+                grid.units[i].hasAttackThisTurn = false;
+            }
+            print("next turn (enemyTurnStart)");
+            currentTurn++;
+        }
+        else
+        {
+            print("next turn (playerTurnStart)");
         }
     }
 }

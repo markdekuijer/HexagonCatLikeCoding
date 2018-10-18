@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class HexGameUI : MonoBehaviour
 {
     public HexGrid grid;
+    public UnityEngine.UI.Text text;
 
     HexCell currentCell;
     HexUnit selectedUnit;
@@ -13,18 +14,23 @@ public class HexGameUI : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+            EndTurn();
+
         if (!EventSystem.current.IsPointerOverGameObject())
         {
+            if(Input.GetMouseButton(4))
+                PrintCellCoord();
             if (selectedUnit)
             {
                 if (Input.GetMouseButtonDown(0))
                 {
                     if (!selectedUnit.hasMovedThisTurn)
-                        DoMove(selectedUnit.Speed);
+                        DoMove(selectedUnit.Speed, GetCell());
                     else if (!selectedUnit.hasAttackThisTurn)
                         DoAttack(GetCell());
                 }
-                else if (!selectedUnit.hasMovedThisTurn)
+                else if (!selectedUnit.hasMovedThisTurn && !selectedUnit.IsTraveling)
                 {
                     DoPathfinding();
                 }
@@ -36,15 +42,7 @@ public class HexGameUI : MonoBehaviour
 
             if (Input.GetMouseButtonDown(1))
             {
-                selectedUnit = null;
-                for (int i = 0; i < cellsToHighlights.Count; i++)
-                {
-                    cellsToHighlights[i].DisableHighlight();
-                }
-                for (int i = 0; i < grid.attackableCells.Count; i++)
-                {
-                    grid.attackableCells[i].DisableHighlight();
-                }
+                CloseSelect();
             }
             else if (Input.GetMouseButtonDown(2))
             {
@@ -86,6 +84,18 @@ public class HexGameUI : MonoBehaviour
         HexCell cell = grid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition));
         return cell;
     }
+    public void CloseSelect()
+    {
+        selectedUnit = null;
+        for (int i = 0; i < cellsToHighlights.Count; i++)
+        {
+            cellsToHighlights[i].DisableHighlight();
+        }
+        for (int i = 0; i < grid.attackableCells.Count; i++)
+        {
+            grid.attackableCells[i].DisableHighlight();
+        }
+    }
 
     void DoSelect()
     {
@@ -124,6 +134,12 @@ public class HexGameUI : MonoBehaviour
             }
         }
     }
+    void PrintCellCoord()
+    {
+        HexCell currentCell = GetCell();
+        if (currentCell)
+            text.text = currentCell.coordinates.ToString();
+    }
 
     void DoPathfinding()
     {
@@ -148,7 +164,8 @@ public class HexGameUI : MonoBehaviour
         }
     }
 
-    void DoMove(int speed)
+    bool attackAfter = false;
+    void DoMove(int speed, HexCell c)
     {
         if (grid.HasPath)
         {
@@ -157,22 +174,42 @@ public class HexGameUI : MonoBehaviour
                 cellsToHighlights[i].DisableHighlight();
             }
             cellsToHighlights.Clear();
-            selectedUnit.Travel(grid.GetPath(speed));
+            selectedUnit.Travel(grid.GetPath(speed),this, c);
             grid.ClearPath();
-            selectedUnit = null;
+            if (!grid.attackableCells.Contains(currentCell))
+            {
+                attackAfter = false;
+                selectedUnit = null;
+            }
+            else
+                attackAfter = true;
             for (int i = 0; i < grid.attackableCells.Count; i++)
             {
                 grid.attackableCells[i].DisableHighlight();
             }
         }
+
     }
 
+    public void AttackAfterCheck(HexCell c)
+    {
+        if (attackAfter)
+        {
+            DoAttack(c);
+            print("attacked");
+        }
+    }
     void DoAttack(HexCell cell)
     {
         if (!cell.Unit)
             return;
 
         if(cell.coordinates.DistanceTo(currentCell.coordinates) <= selectedUnit.attackRange)
-            selectedUnit.InitAttack(cell);
+            selectedUnit.InitAttack(cell, this);
+    }
+
+    public void EndTurn()
+    {
+        TurnbasedManager.Instance.InitNextTurn();
     }
 }

@@ -124,16 +124,16 @@ public class HexUnit : MonoBehaviour
         }
         return moveCost;
     }
-    public void Travel(List<HexCell> path)
+    public void Travel(List<HexCell> path, HexGameUI gameUI, HexCell c)
     {
         location.Unit = null;
         location = path[path.Count - 1];
         location.Unit = this;
         pathToTravel = path;
         StopAllCoroutines();
-        StartCoroutine(TravelPath());
+        StartCoroutine(TravelPath(gameUI, c));
     }
-    IEnumerator TravelPath()
+    IEnumerator TravelPath(HexGameUI gameUI, HexCell attackCell)
     {
         isTraveling = true;
         Vector3 a, b, c = pathToTravel[0].Position;
@@ -184,16 +184,19 @@ public class HexUnit : MonoBehaviour
         isTraveling = false;
         hasMovedThisTurn = true;
         animHandler.SetWalking(isTraveling);
+        gameUI.AttackAfterCheck(attackCell);
     }
 
-    public void InitAttack(HexCell cell)
+    public void InitAttack(HexCell cell, HexGameUI gameUI)
     {
-        StartCoroutine(Attack(cell));
+        StartCoroutine(Attack(cell, gameUI));
     }
-    IEnumerator Attack(HexCell attackedCell)
+    IEnumerator Attack(HexCell attackedCell, HexGameUI gameUI)
     {
         yield return LookAt(attackedCell.Position);
         animHandler.InitAttack();
+        hasAttackThisTurn = true;
+        gameUI.CloseSelect();
     }
 
     IEnumerator LookAt(Vector3 point)
