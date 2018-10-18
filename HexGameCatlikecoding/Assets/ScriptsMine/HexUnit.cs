@@ -62,6 +62,8 @@ public class HexUnit : MonoBehaviour
 
     public HexGrid Grid { get; set; }
 
+    public int damage;
+    public int Health;
     public int Speed
     {
         get
@@ -197,6 +199,7 @@ public class HexUnit : MonoBehaviour
         animHandler.InitAttack();
         hasAttackThisTurn = true;
         gameUI.CloseSelect();
+        DoDamage(attackedCell.Unit);
     }
 
     IEnumerator LookAt(Vector3 point)
@@ -221,6 +224,18 @@ public class HexUnit : MonoBehaviour
         orientation = transform.localRotation.eulerAngles.y;
     }
 
+    public void DoDamage(HexUnit otherUnit)
+    {
+        otherUnit.TakeDamage(damage);
+    }
+    public void TakeDamage(int damage)
+    {
+        Health -= damage;
+        if(Health <= 0)
+        {
+            Die();
+        }
+    }
     public void Die()
     {
         if (location) //TODO remove this to keep location

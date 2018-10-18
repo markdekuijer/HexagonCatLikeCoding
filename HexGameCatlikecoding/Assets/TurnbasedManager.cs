@@ -11,6 +11,7 @@ public class TurnbasedManager : MonoBehaviour
 
     int currentTurn;
 
+    public List<HexUnit> allyUnits = new List<HexUnit>();
     public List<HexUnit> enemyUnits = new List<HexUnit>();
 
     private void Awake()
@@ -29,6 +30,7 @@ public class TurnbasedManager : MonoBehaviour
         {
             for (int i = 0; i < enemyUnits.Count; i++)
             {
+                //enemyUnits[i].CalculateNextMove();
             }
             InitNextTurn();
         }

@@ -64,6 +64,12 @@ public class HexGrid : MonoBehaviour
         }
     }
 
+    public void CreateAllyAndEnemyList()
+    {
+        //loop through units. also in the Load function
+        //if enemy check. then add to turnbased.instance.list....
+    }
+
     public bool CreateMap(int x, int z)
     {
         if(x <= 0 || x % HexMetrics.chunkSizeX != 0 || z <= 0 || z % HexMetrics.chunkSizeZ != 0)
@@ -387,7 +393,7 @@ public class HexGrid : MonoBehaviour
         for (int i = 0; i < bonusChecks.Count; i++)
         {
             print(bonusChecks[i].coordinates);
-            searchExtendingAttackArea(bonusChecks[i], 2);
+            searchExtendingAttackArea(bonusChecks[i], attackRange);
         }
 
         return cellsToHighlight;
@@ -528,11 +534,8 @@ public class HexGrid : MonoBehaviour
         {
             if(cellsToHighlight[i] != fromCell)
             {
-                if (cellsToHighlight[i].Unit)
-                {
-                    attackableCells.Add(cellsToHighlight[i]);
-                    cellsToHighlight[i].EnableHighlight(Color.black);
-                }
+                attackableCells.Add(cellsToHighlight[i]);
+                cellsToHighlight[i].EnableHighlight(Color.black);
             }
         }
     }

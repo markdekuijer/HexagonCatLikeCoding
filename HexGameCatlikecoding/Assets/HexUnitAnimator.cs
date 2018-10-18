@@ -9,7 +9,7 @@ public class HexUnitAnimator : MonoBehaviour
     private void Update()
     {
         if(isDead)
-            transform.position += Vector3.down * Time.deltaTime;
+            transform.position += Vector3.down * Time.deltaTime * 2;
     }
 
     public void SetWalking(bool state)
@@ -28,13 +28,14 @@ public class HexUnitAnimator : MonoBehaviour
     public void Die()
     {
         anim.SetTrigger("Die");
-        isDead = true;
         StartCoroutine(DieTimer());
     }
 
     IEnumerator DieTimer()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(4);
+        isDead = true;
+        yield return new WaitForSeconds(6);
         Destroy(gameObject);
         yield return null;
     }
