@@ -20,6 +20,7 @@ public class TurnbasedManager : MonoBehaviour
             Instance = this;
     }
 
+    bool enemyTurned;
     void Update ()
     {
         if (playerTurn)
@@ -28,11 +29,15 @@ public class TurnbasedManager : MonoBehaviour
         }
         else
         {
+            if (enemyTurned)
+                return;
+            print("enemy Moving");
             for (int i = 0; i < enemyUnits.Count; i++)
             {
-                //enemyUnits[i].CalculateNextMove();
+                enemyUnits[i].CalculateNextMove(grid);
             }
-            InitNextTurn();
+            enemyTurned = true;
+            //InitNextTurn();
         }
 	}
 
@@ -54,5 +59,21 @@ public class TurnbasedManager : MonoBehaviour
         {
             print("next turn (playerTurnStart)");
         }
+        enemyTurned = false;
+    }
+
+    public HexUnit GetClosestAlly(HexCoordinates coord)
+    {
+        int MaxInt = int.MaxValue;
+        HexUnit u = null;
+        for (int i = 0; i < allyUnits.Count; i++)
+        {
+           if(allyUnits[i].Location.coordinates.DistanceTo(coord) < MaxInt)
+            {
+                u = allyUnits[i];
+            }
+        }
+
+        return u;
     }
 }

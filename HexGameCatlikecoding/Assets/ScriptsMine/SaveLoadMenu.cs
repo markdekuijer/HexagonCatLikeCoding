@@ -16,7 +16,7 @@ public class SaveLoadMenu : MonoBehaviour
 
     private void OnEnable()
     {
-        Load(Path.Combine(Application.persistentDataPath, "NewFightArea.map"));
+        //Load(Path.Combine(Application.persistentDataPath, "NewFightArea.map"));
     }
 
     string GetSelectedPath()

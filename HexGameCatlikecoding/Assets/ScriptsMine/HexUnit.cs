@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class HexUnit : MonoBehaviour
 {
@@ -186,7 +187,8 @@ public class HexUnit : MonoBehaviour
         isTraveling = false;
         hasMovedThisTurn = true;
         animHandler.SetWalking(isTraveling);
-        gameUI.AttackAfterCheck(attackCell);
+        if(gameUI)
+            gameUI.AttackAfterCheck(attackCell);
     }
 
     public void InitAttack(HexCell cell, HexGameUI gameUI)
@@ -198,7 +200,8 @@ public class HexUnit : MonoBehaviour
         yield return LookAt(attackedCell.Position);
         animHandler.InitAttack();
         hasAttackThisTurn = true;
-        gameUI.CloseSelect();
+        if(gameUI)
+            gameUI.CloseSelect();
         DoDamage(attackedCell.Unit);
     }
 
@@ -258,5 +261,26 @@ public class HexUnit : MonoBehaviour
         float orientation = reader.ReadSingle();
         bool isEnemy = reader.ReadBoolean();
         grid.AddUnit(Instantiate(unitPrefab), grid.GetCell(coordinates), orientation, isEnemy);
+    }
+
+    public void CalculateNextMove(HexGrid grid)
+    {
+        //TODO shit is fcked up here
+        HexUnit target = TurnbasedManager.Instance.GetClosestAlly(location.coordinates);
+        bool canWalkThisPath = grid.Search(location, target.location, this, true);
+        if (canWalkThisPath)
+        {
+            List<HexCell> path = grid.GetPathWithoutExistCheck(Speed);
+            if(path.Count > 1)
+            {
+                path.RemoveAt(path.Count - 1);
+                Travel(path, null, location);
+            }
+            InitAttack(target.location, null);
+        }
+        else
+        {
+            print("fck");
+        }
     }
 }
