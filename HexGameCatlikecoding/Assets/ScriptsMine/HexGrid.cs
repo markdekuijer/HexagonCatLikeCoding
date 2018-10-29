@@ -708,15 +708,15 @@ public class HexGrid : MonoBehaviour
         path.Reverse();
         return path;
     }
-    public List<HexCell> GetPathWithoutExistCheck(int speed)
+    public List<HexCell> GetPathWithoutExistCheck(int speed, HexCell to, HexCell from)
     {
         List<HexCell> path = ListPool<HexCell>.Get();
-        for (HexCell c = currentPathTo; c != currentPathFrom; c = c.PathFrom)
+        for (HexCell c = to; c != from; c = c.PathFrom)
         {
             if (c.Distance < speed)
                 path.Add(c);
         }
-        path.Add(currentPathFrom);
+        path.Add(from);
         path.Reverse();
         return path;
     }

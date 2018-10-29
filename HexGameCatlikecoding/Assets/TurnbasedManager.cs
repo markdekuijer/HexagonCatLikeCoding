@@ -7,7 +7,7 @@ public class TurnbasedManager : MonoBehaviour
     public static TurnbasedManager Instance;
 
     public HexGrid grid;
-    public bool playerTurn;
+    public bool playerTurn = true;
 
     int currentTurn;
 
@@ -34,12 +34,17 @@ public class TurnbasedManager : MonoBehaviour
             print("enemy Moving");
             for (int i = 0; i < enemyUnits.Count; i++)
             {
-                enemyUnits[i].CalculateNextMove(grid);
+                enemyUnits[i].CalculateNextMove(grid, allyUnits);
             }
             enemyTurned = true;
             //InitNextTurn();
         }
 	}
+
+    private void LateUpdate()
+    {
+        
+    }
 
     public void InitNextTurn()
     {
@@ -48,29 +53,29 @@ public class TurnbasedManager : MonoBehaviour
         {
             for (int i = 0; i < grid.units.Count; i++)
             {
-                print("Reset");
                 grid.units[i].hasMovedThisTurn = false;
                 grid.units[i].hasAttackThisTurn = false;
             }
-            print("next turn (enemyTurnStart)");
+            print("playerTurnStart");
             currentTurn++;
         }
         else
         {
-            print("next turn (playerTurnStart)");
+            print("enemyTurnStart");
         }
         enemyTurned = false;
     }
 
-    public HexUnit GetClosestAlly(HexCoordinates coord)
+    public HexUnit GetClosestAlly(HexCoordinates coord, List<HexUnit> units)
     {
         int MaxInt = int.MaxValue;
         HexUnit u = null;
         for (int i = 0; i < allyUnits.Count; i++)
         {
-           if(allyUnits[i].Location.coordinates.DistanceTo(coord) < MaxInt)
+            if(allyUnits[i].Location.coordinates.DistanceTo(coord) < MaxInt)
             {
-                u = allyUnits[i];
+                if(units.Contains(allyUnits[i]))
+                    u = allyUnits[i];
             }
         }
 

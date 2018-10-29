@@ -104,6 +104,12 @@ public class HexUnit : MonoBehaviour
         }
     }
 
+    private void LateUpdate()
+    {
+        if(isEnemy && location != null)
+            location.EnableHighlight(Color.red);
+    }
+
     public int GetMoveCost(HexCell fromCell, HexCell toCell, HexDirection direciton)
     {
         HexEdgeType edgeType = fromCell.GetEdgeType(direciton);
@@ -229,7 +235,7 @@ public class HexUnit : MonoBehaviour
 
     public void DoDamage(HexUnit otherUnit)
     {
-        otherUnit.TakeDamage(damage);
+        otherUnit.TakeDamage(damage);//TODO fix?
     }
     public void TakeDamage(int damage)
     {
@@ -263,24 +269,42 @@ public class HexUnit : MonoBehaviour
         grid.AddUnit(Instantiate(unitPrefab), grid.GetCell(coordinates), orientation, isEnemy);
     }
 
-    public void CalculateNextMove(HexGrid grid)
+    public void CalculateNextMove(HexGrid grid, List<HexUnit> unitsToCheck)
     {
+        if (unitsToCheck.Count == 0)
+        {
+            print("These bitches empty, Yeet");
+            return;
+        }
         //TODO shit is fcked up here
-        HexUnit target = TurnbasedManager.Instance.GetClosestAlly(location.coordinates);
+        HexUnit target = TurnbasedManager.Instance.GetClosestAlly(location.coordinates, unitsToCheck);
         bool canWalkThisPath = grid.Search(location, target.location, this, true);
         if (canWalkThisPath)
         {
-            List<HexCell> path = grid.GetPathWithoutExistCheck(Speed);
+            List<HexCell> path = grid.GetPathWithoutExistCheck(Speed, target.location, location);
             if(path.Count > 1)
             {
                 path.RemoveAt(path.Count - 1);
+                print(path[0]);
                 Travel(path, null, location);
             }
-            InitAttack(target.location, null);
+            else
+            {
+                print("path is 0");
+            }
+            print("found everything");
+            print(target.isEnemy);
+            //InitAttack(target.location, null); TODO let this start after travel
         }
         else
         {
-            print("fck");
+            if (!target)
+            {
+                Debug.LogError("fcked up no target existing");
+            }
+            unitsToCheck.Remove(target);
+            CalculateNextMove(grid, unitsToCheck);
         }
     }
+
 }
