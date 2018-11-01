@@ -133,16 +133,61 @@ public class HexUnit : MonoBehaviour
         }
         return moveCost;
     }
-    public void Travel(List<HexCell> path, HexGameUI gameUI, HexCell c)
+    public void CalculateNextMove(HexGrid grid, List<HexUnit> unitsToCheck)
+    {
+        if (unitsToCheck.Count == 0)
+        {
+            print("These bitches empty, Yeet");
+            return;
+        }
+
+        HexUnit target = TurnbasedManager.Instance.GetClosestAlly(location.coordinates, unitsToCheck);
+        bool canWalkThisPath = grid.Search(location, target.location, this, true);
+        if (canWalkThisPath)
+        {
+            List<HexCell> path = grid.GetPathWithoutExistCheck(Speed, target.location, location);
+            if(path.Count > 1)
+            {
+                if (path[path.Count - 1].Unit)
+                {
+                    path.RemoveAt(path.Count - 1);
+                    int reduceSteps = attackRange - 1;
+                    if (reduceSteps > 0)
+                    {
+                        for (int i = 0; i < reduceSteps; i++)
+                        {
+                            path.RemoveAt(path.Count - 1);
+                        }
+                    }
+                }
+
+                Travel(path, null, target.location, false);
+            }
+        }
+        else
+        {
+            if (!target)
+            {
+                Debug.LogError("fcked up no target existing");
+            }
+            unitsToCheck.Remove(target);
+            CalculateNextMove(grid, unitsToCheck);
+        }
+    }
+
+    public void Travel(List<HexCell> path, HexGameUI gameUI, HexCell c, bool isPlayer)
     {
         location.Unit = null;
         location = path[path.Count - 1];
         location.Unit = this;
         pathToTravel = path;
         StopAllCoroutines();
-        StartCoroutine(TravelPath(gameUI, c));
+        if (isPlayer)
+            StartCoroutine(TravelPathPlayer(gameUI, c));
+        else
+            StartCoroutine(TravelPathEnemy(c));
     }
-    IEnumerator TravelPath(HexGameUI gameUI, HexCell attackCell)
+    IEnumerator TravelPathPlayer(HexGameUI gameUI, HexCell attackCell)
     {
         isTraveling = true;
         Vector3 a, b, c = pathToTravel[0].Position;
@@ -196,7 +241,69 @@ public class HexUnit : MonoBehaviour
         if(gameUI)
             gameUI.AttackAfterCheck(attackCell);
     }
+    IEnumerator TravelPathEnemy(HexCell attackCell)
+    {
+        //TODO Attack if in reach
+        isTraveling = true;
+        Vector3 a, b, c = pathToTravel[0].Position;
+        yield return LookAt(pathToTravel[1].Position);
+        animHandler.SetWalking(isTraveling);
+        Grid.DecreaseVisibility(currentTravelLocation ? currentTravelLocation : pathToTravel[0], VisionRange); //REMOVE
 
+        float t = Time.deltaTime * travelSpeed;
+        for (int i = 1; i < pathToTravel.Count; i++)
+        {
+            currentTravelLocation = pathToTravel[i];
+            a = c;
+            b = pathToTravel[i - 1].Position;
+            c = (b + currentTravelLocation.Position) * 0.5f;
+            Grid.IncreaseVisibility(pathToTravel[i], VisionRange); //REMOVE
+
+            for (; t < 1; t += Time.deltaTime * travelSpeed)
+            {
+                transform.localPosition = Bezier.GetPoint(a, b, c, t);
+                Vector3 d = Bezier.GetDerivative(a, b, c, t);
+                d.y = 0f;
+                transform.localRotation = Quaternion.LookRotation(d);
+                yield return null;
+            }
+            Grid.DecreaseVisibility(pathToTravel[i], VisionRange); //REMOVE
+            t -= 1f;
+        }
+        currentTravelLocation = null;
+
+        a = c;
+        b = location.Position;
+        c = b;
+        Grid.IncreaseVisibility(location, VisionRange); //REMOVE
+
+        for (; t < 1; t += Time.deltaTime * travelSpeed)
+        {
+            transform.localPosition = Bezier.GetPoint(a, b, c, t);
+            Vector3 d = Bezier.GetDerivative(a, b, c, t);
+            d.y = 0f;
+            transform.localRotation = Quaternion.LookRotation(d); yield return null;
+        }
+
+        transform.localPosition = location.Position;
+        orientation = transform.localRotation.eulerAngles.y;
+        ListPool<HexCell>.Add(pathToTravel);
+
+        pathToTravel = null;
+        isTraveling = false;
+        hasMovedThisTurn = true;
+        animHandler.SetWalking(isTraveling);
+        //if (gameUI)
+        //    gameUI.AttackAfterCheck(attackCell);
+        yield return null;
+        print(location.coordinates + " ||| " + attackCell.coordinates + " ||| " + location.coordinates.DistanceTo(attackCell.coordinates));
+        if(location.coordinates.DistanceTo(attackCell.coordinates) <= attackRange)
+        {
+            InitAttack(attackCell, null); //TODO let this start after travel
+        }
+    }
+
+    #region attack
     public void InitAttack(HexCell cell, HexGameUI gameUI)
     {
         StartCoroutine(Attack(cell, gameUI));
@@ -210,7 +317,6 @@ public class HexUnit : MonoBehaviour
             gameUI.CloseSelect();
         DoDamage(attackedCell.Unit);
     }
-
     IEnumerator LookAt(Vector3 point)
     {
         point.y = transform.localPosition.y;
@@ -232,7 +338,9 @@ public class HexUnit : MonoBehaviour
         transform.LookAt(point);
         orientation = transform.localRotation.eulerAngles.y;
     }
+    #endregion
 
+    #region dmg
     public void DoDamage(HexUnit otherUnit)
     {
         otherUnit.TakeDamage(damage);//TODO fix?
@@ -254,7 +362,9 @@ public class HexUnit : MonoBehaviour
         location.Unit = null;
         animHandler.Die();
     }
+    #endregion
 
+    #region savedata
     public void Save(BinaryWriter writer)
     {
         location.coordinates.Save(writer);
@@ -268,43 +378,5 @@ public class HexUnit : MonoBehaviour
         bool isEnemy = reader.ReadBoolean();
         grid.AddUnit(Instantiate(unitPrefab), grid.GetCell(coordinates), orientation, isEnemy);
     }
-
-    public void CalculateNextMove(HexGrid grid, List<HexUnit> unitsToCheck)
-    {
-        if (unitsToCheck.Count == 0)
-        {
-            print("These bitches empty, Yeet");
-            return;
-        }
-        //TODO shit is fcked up here
-        HexUnit target = TurnbasedManager.Instance.GetClosestAlly(location.coordinates, unitsToCheck);
-        bool canWalkThisPath = grid.Search(location, target.location, this, true);
-        if (canWalkThisPath)
-        {
-            List<HexCell> path = grid.GetPathWithoutExistCheck(Speed, target.location, location);
-            if(path.Count > 1)
-            {
-                path.RemoveAt(path.Count - 1);
-                print(path[0]);
-                Travel(path, null, location);
-            }
-            else
-            {
-                print("path is 0");
-            }
-            print("found everything");
-            print(target.isEnemy);
-            //InitAttack(target.location, null); TODO let this start after travel
-        }
-        else
-        {
-            if (!target)
-            {
-                Debug.LogError("fcked up no target existing");
-            }
-            unitsToCheck.Remove(target);
-            CalculateNextMove(grid, unitsToCheck);
-        }
-    }
-
+    #endregion
 }

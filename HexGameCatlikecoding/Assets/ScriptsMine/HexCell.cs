@@ -612,6 +612,7 @@ public class HexCell : MonoBehaviour
         }
         IsExplored = header >= 3 ? reader.ReadBoolean() : false;
         ShaderData.RefreshVisibility(this);
+        //SetLabel(coordinates.ToString()); TODO show labels
     }
 
     void Refresh()

@@ -241,71 +241,7 @@ public class HexGrid : MonoBehaviour
         sw.Stop();
         //print(sw.ElapsedMilliseconds); //time to find new path
     }
-    public bool Search(HexCell fromCell, HexCell toCell, HexUnit unit)
-    {
-        int speed = unit.Speed;
-        searchOpenNodesPhase += 2;
-
-        if (searchOpenNodes == null)
-            searchOpenNodes = new HexCellPriorityQueue();
-        else
-            searchOpenNodes.Clear();
-
-        fromCell.SearchPhase = searchOpenNodesPhase;
-        fromCell.Distance = 0;
-        searchOpenNodes.Enqueue(fromCell);
-
-        while(searchOpenNodes.Count > 0)
-        {
-            HexCell current = searchOpenNodes.Dequeue();
-            current.SearchPhase += 1;
-
-            if(current == toCell)
-            {
-                return true;
-            }
-
-            int currentTurn = (current.Distance - 1) / speed;
-
-            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
-            {
-                HexCell neighbor = current.GetNeighbor(d);
-                if (neighbor == null || neighbor.SearchPhase > searchOpenNodesPhase) 
-                    continue;
-
-                if (!unit.IsValidDestination(neighbor))
-                    continue;
-                int moveCost = unit.GetMoveCost(current, neighbor, d);
-                if (moveCost < 0)
-                    continue;
-
-                int distance = current.Distance + moveCost;
-                int turn = (distance - 1) / speed;
-
-                if (turn > currentTurn)
-                    distance = turn * speed + moveCost;
-
-                if (neighbor.SearchPhase < searchOpenNodesPhase)
-                {
-                    neighbor.SearchPhase = searchOpenNodesPhase;
-                    neighbor.Distance = distance;
-                    neighbor.PathFrom = current;
-                    neighbor.SearchHeuristic = neighbor.coordinates.DistanceTo(toCell.coordinates);
-                    searchOpenNodes.Enqueue(neighbor);
-                }
-                else if(distance < neighbor.Distance)
-                {
-                    int oldPriority = neighbor.SearchPriority;
-                    neighbor.Distance = distance;
-                    neighbor.PathFrom = current;
-                    searchOpenNodes.Change(neighbor, oldPriority);
-                }
-            }
-
-        }
-        return false;
-    }
-    public bool Search(HexCell fromCell, HexCell toCell, HexUnit unit, bool isEnemy)
+    public bool Search(HexCell fromCell, HexCell toCell, HexUnit unit, bool isEnemy = false)
     {
         int speed = unit.Speed;
         searchOpenNodesPhase += 2;
@@ -337,6 +273,14 @@ public class HexGrid : MonoBehaviour
                 if (neighbor == null || neighbor.SearchPhase > searchOpenNodesPhase)
                     continue;
 
+                //if (!isEnemy)
+                //{
+                //    if (!unit.IsValidDestination(neighbor))
+                //    {
+                //        continue;
+                //    }
+                //}
+
                 int moveCost = unit.GetMoveCost(current, neighbor, d);
                 if (moveCost < 0)
                     continue;
@@ -367,7 +311,6 @@ public class HexGrid : MonoBehaviour
         }
         return false;
     }
-
 
     [HideInInspector] public List<HexCell> attackableCells = new List<HexCell>();
     [HideInInspector] public List<HexCell> bonusChecks = new List<HexCell>();

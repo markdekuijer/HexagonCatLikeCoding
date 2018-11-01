@@ -174,7 +174,7 @@ public class HexGameUI : MonoBehaviour
                 cellsToHighlights[i].DisableHighlight();
             }
             cellsToHighlights.Clear();
-            selectedUnit.Travel(grid.GetPath(speed),this, c);
+            selectedUnit.Travel(grid.GetPath(speed),this, c, true);
             grid.ClearPath();
             if (!grid.attackableCells.Contains(currentCell))
             {

@@ -31,15 +31,11 @@ public class TurnbasedManager : MonoBehaviour
         {
             if (enemyTurned)
                 return;
-            print("enemy Moving");
-            for (int i = 0; i < enemyUnits.Count; i++)
-            {
-                enemyUnits[i].CalculateNextMove(grid, allyUnits);
-            }
+
+            StartCoroutine(GoThroughEnemys());
             enemyTurned = true;
-            //InitNextTurn();
         }
-	}
+    }
 
     private void LateUpdate()
     {
@@ -65,17 +61,30 @@ public class TurnbasedManager : MonoBehaviour
         }
         enemyTurned = false;
     }
+    IEnumerator GoThroughEnemys()
+    {
+        print("enemy Moving");
+
+        for (int i = 0; i < enemyUnits.Count; i++)
+        {
+            enemyUnits[i].CalculateNextMove(grid, allyUnits);// TODO wait for eachother reeeeeee
+            yield return new WaitForSeconds(5f);
+        }
+    }
 
     public HexUnit GetClosestAlly(HexCoordinates coord, List<HexUnit> units)
     {
         int MaxInt = int.MaxValue;
         HexUnit u = null;
-        for (int i = 0; i < allyUnits.Count; i++)
+        for (int i = 0; i < units.Count; i++)
         {
-            if(allyUnits[i].Location.coordinates.DistanceTo(coord) < MaxInt)
+            if(units[i].Location.coordinates.DistanceTo(coord) < MaxInt)
             {
-                if(units.Contains(allyUnits[i]))
+                if (units.Contains(allyUnits[i]))
+                {
                     u = allyUnits[i];
+                    MaxInt = units[i].Location.coordinates.DistanceTo(coord);
+                }
             }
         }
 

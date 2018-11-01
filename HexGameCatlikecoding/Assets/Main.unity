@@ -14561,6 +14561,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 0}
   playerTurn: 0
+  allyUnits: []
   enemyUnits: []
 --- !u!4 &2068341181
 Transform:
