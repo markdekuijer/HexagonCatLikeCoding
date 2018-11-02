@@ -273,13 +273,18 @@ public class HexGrid : MonoBehaviour
                 if (neighbor == null || neighbor.SearchPhase > searchOpenNodesPhase)
                     continue;
 
-                //if (!isEnemy)
-                //{
-                //    if (!unit.IsValidDestination(neighbor))
-                //    {
-                //        continue;
-                //    }
-                //}
+                if (!isEnemy)
+                {
+                    if (!unit.IsValidDestination(neighbor))
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    if (neighbor.Unit && neighbor != toCell)
+                        continue;
+                }
 
                 int moveCost = unit.GetMoveCost(current, neighbor, d);
                 if (moveCost < 0)
@@ -406,7 +411,6 @@ public class HexGrid : MonoBehaviour
         }
         for (int i = 0; i < bonusChecks.Count; i++)
         {
-            print(bonusChecks[i].coordinates);
             searchExtendingAttackArea(bonusChecks[i], attackRange);
         }
 
@@ -631,8 +635,7 @@ public class HexGrid : MonoBehaviour
         }
         for (int i = 0; i < units.Count; i++)
         {
-            HexUnit unit = units[i];
-            IncreaseVisibility(unit.Location, unit.VisionRange);
+            IncreaseVisibility(units[i].Location, units[i].VisionRange);
         }
     }
 

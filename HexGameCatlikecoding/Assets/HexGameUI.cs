@@ -11,6 +11,13 @@ public class HexGameUI : MonoBehaviour
     HexUnit selectedUnit;
 
     List<HexCell> cellsToHighlights = new List<HexCell>();
+    public static HexGameUI instance;
+
+    private void Awake()
+    {
+        if (instance == null)
+            instance = this;
+    }
 
     private void Update()
     {

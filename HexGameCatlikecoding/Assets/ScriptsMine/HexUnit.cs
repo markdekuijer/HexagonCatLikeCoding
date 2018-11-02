@@ -13,6 +13,7 @@ public class HexUnit : MonoBehaviour
 
     public bool hasMovedThisTurn;
     public bool hasAttackThisTurn;
+    public bool hasTurned;
     public bool isEnemy;
 
     public HexUnitAnimator animHandler;
@@ -37,12 +38,16 @@ public class HexUnit : MonoBehaviour
         {
             if (location)
             {
-                Grid.DecreaseVisibility(location, VisionRange);
+                if (!isEnemy)
+                {
+                    Grid.DecreaseVisibility(location, VisionRange);
+                }
                 location.Unit = null;
             }
             location = value;
             value.Unit = this;
-            Grid.IncreaseVisibility(value, VisionRange);
+            if(!isEnemy)
+                Grid.IncreaseVisibility(value, VisionRange);
             transform.localPosition = value.Position;
         }
     }
@@ -97,8 +102,11 @@ public class HexUnit : MonoBehaviour
             transform.localPosition = location.Position;
             if (currentTravelLocation)
             {
-                Grid.IncreaseVisibility(location, VisionRange);
-                Grid.DecreaseVisibility(currentTravelLocation, VisionRange);
+                if (!isEnemy)
+                {
+                    Grid.IncreaseVisibility(location, VisionRange);
+                    Grid.DecreaseVisibility(currentTravelLocation, VisionRange);
+                }
                 currentTravelLocation = null;
             }
         }
@@ -135,24 +143,42 @@ public class HexUnit : MonoBehaviour
     }
     public void CalculateNextMove(HexGrid grid, List<HexUnit> unitsToCheck)
     {
-        if (unitsToCheck.Count == 0)
+        //da wae
+        attackRange = 3;
+        List<HexUnit> allUnits = new List<HexUnit>(unitsToCheck);
+        if (allUnits.Count == 0)
         {
             print("These bitches empty, Yeet");
+            hasTurned = true;
             return;
         }
 
-        HexUnit target = TurnbasedManager.Instance.GetClosestAlly(location.coordinates, unitsToCheck);
+        HexUnit target = TurnbasedManager.Instance.GetClosestAlly(location.coordinates, allUnits);
         bool canWalkThisPath = grid.Search(location, target.location, this, true);
         if (canWalkThisPath)
         {
             List<HexCell> path = grid.GetPathWithoutExistCheck(Speed, target.location, location);
+            int reduceSteps = attackRange - 1;
             if(path.Count > 1)
             {
                 if (path[path.Count - 1].Unit)
                 {
                     path.RemoveAt(path.Count - 1);
-                    int reduceSteps = attackRange - 1;
+
                     if (reduceSteps > 0)
+                    {
+                        if(path[path.Count - 1].coordinates.DistanceTo(target.location.coordinates) != 1)
+                        {
+                            for (int i = 0; i < reduceSteps; i++)
+                            {
+                                path.RemoveAt(path.Count - 1);
+                            }
+                        }
+                    }
+                }
+                if(path.Count > 1)
+                {
+                    if(path[path.Count - 1].coordinates.DistanceTo(target.location.coordinates) == 1)
                     {
                         for (int i = 0; i < reduceSteps; i++)
                         {
@@ -170,22 +196,26 @@ public class HexUnit : MonoBehaviour
             {
                 Debug.LogError("fcked up no target existing");
             }
-            unitsToCheck.Remove(target);
-            CalculateNextMove(grid, unitsToCheck);
+            allUnits.Remove(target);
+            CalculateNextMove(grid, allUnits);
         }
     }
 
     public void Travel(List<HexCell> path, HexGameUI gameUI, HexCell c, bool isPlayer)
     {
-        location.Unit = null;
-        location = path[path.Count - 1];
+        HexCell origin = location;
+        if(path.Count != 0)
+        {
+            location.Unit = null;
+            location = path[path.Count - 1];
+        }
         location.Unit = this;
         pathToTravel = path;
         StopAllCoroutines();
         if (isPlayer)
             StartCoroutine(TravelPathPlayer(gameUI, c));
         else
-            StartCoroutine(TravelPathEnemy(c));
+            StartCoroutine(TravelPathEnemy(c, origin));
     }
     IEnumerator TravelPathPlayer(HexGameUI gameUI, HexCell attackCell)
     {
@@ -241,14 +271,19 @@ public class HexUnit : MonoBehaviour
         if(gameUI)
             gameUI.AttackAfterCheck(attackCell);
     }
-    IEnumerator TravelPathEnemy(HexCell attackCell)
+    IEnumerator TravelPathEnemy(HexCell attackCell, HexCell originalCell)
     {
         //TODO Attack if in reach
+        if (originalCell.coordinates.DistanceTo(attackCell.coordinates) <= attackRange)
+        {
+            InitAttack(attackCell, null); //TODO let this start after travel
+            yield break;
+        }
         isTraveling = true;
         Vector3 a, b, c = pathToTravel[0].Position;
         yield return LookAt(pathToTravel[1].Position);
         animHandler.SetWalking(isTraveling);
-        Grid.DecreaseVisibility(currentTravelLocation ? currentTravelLocation : pathToTravel[0], VisionRange); //REMOVE
+        //Grid.DecreaseVisibility(currentTravelLocation ? currentTravelLocation : pathToTravel[0], VisionRange); //REMOVE
 
         float t = Time.deltaTime * travelSpeed;
         for (int i = 1; i < pathToTravel.Count; i++)
@@ -257,7 +292,7 @@ public class HexUnit : MonoBehaviour
             a = c;
             b = pathToTravel[i - 1].Position;
             c = (b + currentTravelLocation.Position) * 0.5f;
-            Grid.IncreaseVisibility(pathToTravel[i], VisionRange); //REMOVE
+            //Grid.IncreaseVisibility(pathToTravel[i], VisionRange); //REMOVE
 
             for (; t < 1; t += Time.deltaTime * travelSpeed)
             {
@@ -267,7 +302,7 @@ public class HexUnit : MonoBehaviour
                 transform.localRotation = Quaternion.LookRotation(d);
                 yield return null;
             }
-            Grid.DecreaseVisibility(pathToTravel[i], VisionRange); //REMOVE
+            //Grid.DecreaseVisibility(pathToTravel[i], VisionRange); //REMOVE
             t -= 1f;
         }
         currentTravelLocation = null;
@@ -275,7 +310,7 @@ public class HexUnit : MonoBehaviour
         a = c;
         b = location.Position;
         c = b;
-        Grid.IncreaseVisibility(location, VisionRange); //REMOVE
+        //Grid.IncreaseVisibility(location, VisionRange); //REMOVE
 
         for (; t < 1; t += Time.deltaTime * travelSpeed)
         {
@@ -296,11 +331,10 @@ public class HexUnit : MonoBehaviour
         //if (gameUI)
         //    gameUI.AttackAfterCheck(attackCell);
         yield return null;
-        print(location.coordinates + " ||| " + attackCell.coordinates + " ||| " + location.coordinates.DistanceTo(attackCell.coordinates));
         if(location.coordinates.DistanceTo(attackCell.coordinates) <= attackRange)
-        {
-            InitAttack(attackCell, null); //TODO let this start after travel
-        }
+            InitAttack(attackCell, null); 
+        else
+            hasTurned = true;
     }
 
     #region attack
@@ -316,6 +350,8 @@ public class HexUnit : MonoBehaviour
         if(gameUI)
             gameUI.CloseSelect();
         DoDamage(attackedCell.Unit);
+        yield return new WaitForSeconds(2f);
+        hasTurned = true;
     }
     IEnumerator LookAt(Vector3 point)
     {
@@ -343,7 +379,7 @@ public class HexUnit : MonoBehaviour
     #region dmg
     public void DoDamage(HexUnit otherUnit)
     {
-        otherUnit.TakeDamage(damage);//TODO fix?
+        otherUnit.TakeDamage(damage); 
     }
     public void TakeDamage(int damage)
     {
@@ -357,10 +393,19 @@ public class HexUnit : MonoBehaviour
     {
         if (location) //TODO remove this to keep location
         {
-            Grid.DecreaseVisibility(location, VisionRange);
+            if (!isEnemy)
+            {
+                Grid.DecreaseVisibility(location, VisionRange);
+            }
         }
         location.Unit = null;
         animHandler.Die();
+
+        if (isEnemy)
+            TurnbasedManager.Instance.enemyUnits.Remove(this);
+        else
+            TurnbasedManager.Instance.allyUnits.Remove(this);
+        //Grid.RemoveUnit(this);
     }
     #endregion
 

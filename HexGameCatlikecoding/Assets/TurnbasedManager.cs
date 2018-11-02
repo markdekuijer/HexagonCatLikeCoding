@@ -16,6 +16,7 @@ public class TurnbasedManager : MonoBehaviour
 
     private void Awake()
     {
+        print("reeeee");
         if (Instance == null)
             Instance = this;
     }
@@ -51,6 +52,7 @@ public class TurnbasedManager : MonoBehaviour
             {
                 grid.units[i].hasMovedThisTurn = false;
                 grid.units[i].hasAttackThisTurn = false;
+                grid.units[i].hasTurned = false;
             }
             print("playerTurnStart");
             currentTurn++;
@@ -67,8 +69,11 @@ public class TurnbasedManager : MonoBehaviour
 
         for (int i = 0; i < enemyUnits.Count; i++)
         {
-            enemyUnits[i].CalculateNextMove(grid, allyUnits);// TODO wait for eachother reeeeeee
-            yield return new WaitForSeconds(5f);
+            enemyUnits[i].CalculateNextMove(grid, allyUnits);
+            while (!enemyUnits[i].hasTurned)
+            {
+                yield return null;
+            }
         }
     }
 
@@ -76,15 +81,13 @@ public class TurnbasedManager : MonoBehaviour
     {
         int MaxInt = int.MaxValue;
         HexUnit u = null;
+        print(units.Count);
         for (int i = 0; i < units.Count; i++)
         {
             if(units[i].Location.coordinates.DistanceTo(coord) < MaxInt)
             {
-                if (units.Contains(allyUnits[i]))
-                {
-                    u = allyUnits[i];
-                    MaxInt = units[i].Location.coordinates.DistanceTo(coord);
-                }
+                u = units[i];
+                MaxInt = units[i].Location.coordinates.DistanceTo(coord);
             }
         }
 
