@@ -35,6 +35,13 @@ public class HexMapEditor : MonoBehaviour
     HexDirection dragDirection;
     HexCell previousCell;
 
+    public UnitType meleeSoldier;
+    public UnitType meleeTank;
+    public UnitType spearSoldier;
+    public UnitType archer;
+    public UnitType gunner;
+    bool spawnEnemy;
+
     void Awake()
     {
         terrainMaterial.DisableKeyword("GRID_ON");
@@ -45,21 +52,53 @@ public class HexMapEditor : MonoBehaviour
     {
         if (!EventSystem.current.IsPointerOverGameObject())
         {
+            if (Input.GetKey(KeyCode.LeftControl))
+            {
+                spawnEnemy = !spawnEnemy;
+            }
             if (Input.GetMouseButton(0))
             {
                 HandleInput();
                 return;
             }
-            if (Input.GetKeyDown(KeyCode.U))
+            if (Input.GetKeyDown(KeyCode.Alpha1))
             {
                 if (Input.GetKey(KeyCode.LeftShift))
-                {
                     DestroyUnit();
-                }
                 else
-                {
-                    CreateUnit();
-                }
+                    CreateUnit(meleeSoldier, spawnEnemy);
+                return;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                if (Input.GetKey(KeyCode.LeftShift))
+                    DestroyUnit();
+                else
+                    CreateUnit(meleeTank, spawnEnemy);
+                return;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                if (Input.GetKey(KeyCode.LeftShift))
+                    DestroyUnit();
+                else
+                    CreateUnit(spearSoldier, spawnEnemy);
+                return;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                if (Input.GetKey(KeyCode.LeftShift))
+                    DestroyUnit();
+                else
+                    CreateUnit(archer, spawnEnemy);
+                return;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha5))
+            {
+                if (Input.GetKey(KeyCode.LeftShift))
+                    DestroyUnit();
+                else
+                    CreateUnit(gunner, spawnEnemy);
                 return;
             }
         }
@@ -97,12 +136,15 @@ public class HexMapEditor : MonoBehaviour
         return null;
     }
 
-    void CreateUnit()
+    void CreateUnit(UnitType type, bool isEnemy)
     {
         HexCell cell = GetCellUnderCursor();
         if (cell && !cell.Unit)
         {
-            hexGrid.AddUnit(Instantiate(HexUnit.unitPrefab), cell, Random.Range(0f, 360f));
+            HexUnit u = Instantiate(HexUnit.unitPrefab);
+            u.isEnemy = isEnemy;
+            u.unitType = type;
+            hexGrid.AddUnit(u, cell, Random.Range(0f, 360f));
         }
     }
     void DestroyUnit()

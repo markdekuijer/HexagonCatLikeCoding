@@ -10113,6 +10113,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   terrainMaterial: {fileID: 2100000, guid: 44525bd28512562408fdc52a9035a5f5, type: 2}
   hexGrid: {fileID: 2065291061}
+  meleeSoldier: {fileID: 11400000, guid: b4212de72ae475741bccddbfa192ecb9, type: 2}
+  meleeTank: {fileID: 11400000, guid: fe18ea43a84d0ac46ae0ad1d06b169ba, type: 2}
+  spearSoldier: {fileID: 11400000, guid: 68e4545e02412c54c980579c1df19db0, type: 2}
+  archer: {fileID: 11400000, guid: f3c12628d9aa1814c9c7c4c9a5cf8426, type: 2}
+  gunner: {fileID: 11400000, guid: 930b2969882382f4f969a1bcec55569b, type: 2}
 --- !u!114 &1525802094
 MonoBehaviour:
   m_ObjectHideFlags: 0

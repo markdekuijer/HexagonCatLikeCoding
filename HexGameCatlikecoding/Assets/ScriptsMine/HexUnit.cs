@@ -68,6 +68,9 @@ public class HexUnit : MonoBehaviour
 
     public HexGrid Grid { get; set; }
 
+    public UnitType unitType;
+    public int typeID;
+
     public int damage;
     public int Health;
     public int Speed
@@ -415,13 +418,16 @@ public class HexUnit : MonoBehaviour
         location.coordinates.Save(writer);
         writer.Write(orientation);
         writer.Write(isEnemy);
+        writer.Write(unitType);
     }
     public static void Load(BinaryReader reader, HexGrid grid)
     {
         HexCoordinates coordinates = HexCoordinates.Load(reader);
         float orientation = reader.ReadSingle();
         bool isEnemy = reader.ReadBoolean();
+        //UnitType type = TODO save ID and get ID from list(heb de list al in scriptable object)
         grid.AddUnit(Instantiate(unitPrefab), grid.GetCell(coordinates), orientation, isEnemy);
     }
     #endregion
 }
+

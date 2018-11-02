@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c85d1a4bbcb0119499f9eef112f49e29, type: 3}
+  m_Name: Spear Soldier
+  m_EditorClassIdentifier: 
+  objectName: Spear Soldier
+  damage: 6
+  Health: 8
+  speed: 24
+  VisionRange: 4
+  attackRange: 2
