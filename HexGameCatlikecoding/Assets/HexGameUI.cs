@@ -28,12 +28,13 @@ public class HexGameUI : MonoBehaviour
 
         if (!EventSystem.current.IsPointerOverGameObject())
         {
-            if(Input.GetMouseButton(4))
-                PrintCellCoord();
             if (selectedUnit)
             {
                 if (Input.GetMouseButtonDown(0))
                 {
+                    CheckNewSelect();
+                    CheckAttack();
+
                     if (!selectedUnit.hasMovedThisTurn)
                         DoMove(selectedUnit.UnitType.speed, GetCell());
                     else if (!selectedUnit.hasAttackThisTurn)
@@ -53,14 +54,36 @@ public class HexGameUI : MonoBehaviour
             {
                 CloseSelect();
             }
-            else if (Input.GetMouseButtonDown(2))
+        }
+    }
+    public void CheckNewSelect()
+    {
+        if (GetCell())
+        {
+            if (GetCell().Unit)
             {
-                grid.ClearPath();
-                grid.SearchMovementArea(GetCell(), 20);
+                if (!GetCell().Unit.isEnemy)
+                {
+                    CloseSelect();
+                    DoSelect();
+                }
             }
         }
     }
-
+    public void CheckAttack()
+    {
+        if (GetCell())
+        {
+            if (GetCell().Unit)
+            {
+                if (GetCell().Unit.isEnemy)
+                {
+                    CloseSelect();
+                    DoAttack(GetCell());
+                }
+            }
+        }
+    }
     public void SetEditMode(bool toggle)
     {
         print("edit");

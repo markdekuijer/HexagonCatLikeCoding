@@ -143,11 +143,9 @@ public class HexUnit : MonoBehaviour
     }
     public IEnumerator DisplayRenderers(float aValue, float time)
     {
-        print("VANISH");
         float alpha = skinnedRenderers[0].material.color.a;
         for (float t = 0; t < 1; t += Time.deltaTime / time)
         {
-            print(t);
             for (int i = 0; i < skinnedRenderers.Count; i++)
             {
                 Color newColor = new Color(1, 1, 1, Mathf.Lerp(alpha, aValue, t));
@@ -251,7 +249,6 @@ public class HexUnit : MonoBehaviour
         HexCell origin = location;
         if(path.Count != 0)
         {
-            //location.DisableHighlight();
             location.Unit = null;
             location = path[path.Count - 1];
         }
@@ -389,6 +386,7 @@ public class HexUnit : MonoBehaviour
     {
         yield return LookAt(attackedCell.Position);
         animHandler.InitAttack();
+        hasMovedThisTurn = true;
         hasAttackThisTurn = true;
         if(gameUI)
             gameUI.CloseSelect();

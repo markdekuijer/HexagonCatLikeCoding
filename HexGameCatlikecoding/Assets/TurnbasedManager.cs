@@ -55,6 +55,7 @@ public class TurnbasedManager : MonoBehaviour
                 grid.units[i].hasTurned = false;
             }
             print("playerTurnStart");
+            HexGameUI.instance.CloseSelect();
             currentTurn++;
         }
         else
@@ -75,6 +76,7 @@ public class TurnbasedManager : MonoBehaviour
                 yield return null;
             }
         }
+        InitNextTurn();
     }
 
     public HexUnit GetClosestAlly(HexCoordinates coord, List<HexUnit> units)

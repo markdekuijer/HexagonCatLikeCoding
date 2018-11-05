@@ -130,15 +130,15 @@ public class HexCellShaderData : MonoBehaviour
             transitioningCells.Add(cell);
 		}
         enabled = true;
-        if (cell.Unit && cell.IsExplored)
-        {
-            if (cell.Unit.isEnemy)
-            {
-                if (cell.IsVisible)
-                    cell.Unit.DisplayRenderers(true);
-                else
-                    StartCoroutine(cell.Unit.DisplayRenderers(0,1));
-            }
-        }
+        //if (cell.Unit && cell.IsExplored) TODO fix dissepairing here
+        //{
+        //    if (cell.Unit.isEnemy)
+        //    {
+        //        if (cell.IsVisible)
+        //            cell.Unit.DisplayRenderers(true);
+        //        else
+        //            StartCoroutine(cell.Unit.DisplayRenderers(0,1));
+        //    }
+        //}
     }
 }
