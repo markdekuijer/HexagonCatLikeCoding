@@ -66,7 +66,7 @@ public class TurnbasedManager : MonoBehaviour
     IEnumerator GoThroughEnemys()
     {
         print("enemy Moving");
-
+        print(enemyUnits.Count);
         for (int i = 0; i < enemyUnits.Count; i++)
         {
             enemyUnits[i].CalculateNextMove(grid, allyUnits);

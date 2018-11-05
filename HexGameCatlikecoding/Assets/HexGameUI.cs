@@ -13,6 +13,8 @@ public class HexGameUI : MonoBehaviour
     List<HexCell> cellsToHighlights = new List<HexCell>();
     public static HexGameUI instance;
 
+    public UnitTypeID unitTypes;
+
     private void Awake()
     {
         if (instance == null)
@@ -33,7 +35,7 @@ public class HexGameUI : MonoBehaviour
                 if (Input.GetMouseButtonDown(0))
                 {
                     if (!selectedUnit.hasMovedThisTurn)
-                        DoMove(selectedUnit.Speed, GetCell());
+                        DoMove(selectedUnit.UnitType.speed, GetCell());
                     else if (!selectedUnit.hasAttackThisTurn)
                         DoAttack(GetCell());
                 }
@@ -120,7 +122,7 @@ public class HexGameUI : MonoBehaviour
 
                 if (!selectedUnit.hasMovedThisTurn)
                 {
-                    cellsToHighlights = grid.SearchMovementArea(selectedUnit.Location, selectedUnit.Speed);
+                    cellsToHighlights = grid.SearchMovementArea(selectedUnit.Location, selectedUnit.UnitType.speed);
                     for (int i = 0; i < grid.attackableCells.Count; i++)
                     {
                         grid.attackableCells[i].EnableHighlight(Color.black);
@@ -129,7 +131,7 @@ public class HexGameUI : MonoBehaviour
                 else if (!selectedUnit.hasAttackThisTurn)
                 {
                     List<HexCell> showAttackRange = new List<HexCell>();
-                    showAttackRange = grid.searchAttackArea(selectedUnit.Location, selectedUnit.attackRange);
+                    showAttackRange = grid.searchAttackArea(selectedUnit.Location, selectedUnit.UnitType.attackRange);
 
                     for (int i = 0; i < showAttackRange.Count; i++)
                     {
@@ -211,7 +213,7 @@ public class HexGameUI : MonoBehaviour
         if (!cell.Unit)
             return;
 
-        if(cell.coordinates.DistanceTo(currentCell.coordinates) <= selectedUnit.attackRange)
+        if(cell.coordinates.DistanceTo(currentCell.coordinates) <= selectedUnit.UnitType.attackRange)
             selectedUnit.InitAttack(cell, this);
     }
 

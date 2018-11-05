@@ -12,7 +12,7 @@ public class SaveLoadMenu : MonoBehaviour
     public RectTransform listContent;
     public SaveLoadItem itemPrefab;
 
-    const int mapFileVersion = 3;
+    const int mapFileVersion = 4;
 
     private void OnEnable()
     {

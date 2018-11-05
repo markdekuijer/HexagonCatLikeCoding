@@ -2500,11 +2500,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hasMovedThisTurn: 0
   hasAttackThisTurn: 0
+  hasTurned: 0
   isEnemy: 0
   animHandler: {fileID: 114903399399382300}
-  damage: 1
-  Health: 1
-  attackRange: 2
+  typeID: 0
 --- !u!114 &114903399399382300
 MonoBehaviour:
   m_ObjectHideFlags: 1

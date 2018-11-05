@@ -52,9 +52,10 @@ public class HexMapEditor : MonoBehaviour
     {
         if (!EventSystem.current.IsPointerOverGameObject())
         {
-            if (Input.GetKey(KeyCode.LeftControl))
+            if (Input.GetKeyDown(KeyCode.LeftControl))
             {
                 spawnEnemy = !spawnEnemy;
+                print(spawnEnemy);
             }
             if (Input.GetMouseButton(0))
             {
@@ -66,7 +67,7 @@ public class HexMapEditor : MonoBehaviour
                 if (Input.GetKey(KeyCode.LeftShift))
                     DestroyUnit();
                 else
-                    CreateUnit(meleeSoldier, spawnEnemy);
+                    CreateUnit(0, spawnEnemy);
                 return;
             }
             if (Input.GetKeyDown(KeyCode.Alpha2))
@@ -74,7 +75,7 @@ public class HexMapEditor : MonoBehaviour
                 if (Input.GetKey(KeyCode.LeftShift))
                     DestroyUnit();
                 else
-                    CreateUnit(meleeTank, spawnEnemy);
+                    CreateUnit(1, spawnEnemy);
                 return;
             }
             if (Input.GetKeyDown(KeyCode.Alpha3))
@@ -82,7 +83,7 @@ public class HexMapEditor : MonoBehaviour
                 if (Input.GetKey(KeyCode.LeftShift))
                     DestroyUnit();
                 else
-                    CreateUnit(spearSoldier, spawnEnemy);
+                    CreateUnit(2, spawnEnemy);
                 return;
             }
             if (Input.GetKeyDown(KeyCode.Alpha4))
@@ -90,7 +91,7 @@ public class HexMapEditor : MonoBehaviour
                 if (Input.GetKey(KeyCode.LeftShift))
                     DestroyUnit();
                 else
-                    CreateUnit(archer, spawnEnemy);
+                    CreateUnit(3, spawnEnemy);
                 return;
             }
             if (Input.GetKeyDown(KeyCode.Alpha5))
@@ -98,7 +99,7 @@ public class HexMapEditor : MonoBehaviour
                 if (Input.GetKey(KeyCode.LeftShift))
                     DestroyUnit();
                 else
-                    CreateUnit(gunner, spawnEnemy);
+                    CreateUnit(4, spawnEnemy);
                 return;
             }
         }
@@ -136,14 +137,13 @@ public class HexMapEditor : MonoBehaviour
         return null;
     }
 
-    void CreateUnit(UnitType type, bool isEnemy)
+    void CreateUnit(int typeID, bool isEnemy)
     {
         HexCell cell = GetCellUnderCursor();
         if (cell && !cell.Unit)
         {
             HexUnit u = Instantiate(HexUnit.unitPrefab);
-            u.isEnemy = isEnemy;
-            u.unitType = type;
+            u.Initialize(typeID, cell, isEnemy);
             hexGrid.AddUnit(u, cell, Random.Range(0f, 360f));
         }
     }

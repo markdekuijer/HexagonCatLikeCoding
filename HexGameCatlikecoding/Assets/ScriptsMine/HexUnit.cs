@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
 public class HexUnit : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class HexUnit : MonoBehaviour
     public bool isEnemy;
 
     public HexUnitAnimator animHandler;
+    private List<SkinnedMeshRenderer> skinnedRenderers = new List<SkinnedMeshRenderer>();
+    private List<MeshRenderer> renderers = new List<MeshRenderer>();
 
     public bool IsTraveling
     {
@@ -40,14 +43,14 @@ public class HexUnit : MonoBehaviour
             {
                 if (!isEnemy)
                 {
-                    Grid.DecreaseVisibility(location, VisionRange);
+                    Grid.DecreaseVisibility(location, UnitType.VisionRange);
                 }
                 location.Unit = null;
             }
             location = value;
             value.Unit = this;
             if(!isEnemy)
-                Grid.IncreaseVisibility(value, VisionRange);
+                Grid.IncreaseVisibility(value, UnitType.VisionRange);
             transform.localPosition = value.Position;
         }
     }
@@ -68,26 +71,17 @@ public class HexUnit : MonoBehaviour
 
     public HexGrid Grid { get; set; }
 
-    public UnitType unitType;
+    private UnitType unitType;
+    public UnitType UnitType
+    {
+        get
+        {
+            return unitType;
+        }
+    }
     public int typeID;
+    int health;
 
-    public int damage;
-    public int Health;
-    public int Speed
-    {
-        get
-        {
-            return 24;
-        }
-    }
-    public int VisionRange
-    {
-        get
-        {
-            return 3;
-        }
-    }
-    public int attackRange;
 
     public void ValidatePosition()
     {
@@ -107,18 +101,67 @@ public class HexUnit : MonoBehaviour
             {
                 if (!isEnemy)
                 {
-                    Grid.IncreaseVisibility(location, VisionRange);
-                    Grid.DecreaseVisibility(currentTravelLocation, VisionRange);
+                    Grid.IncreaseVisibility(location, UnitType.VisionRange);
+                    Grid.DecreaseVisibility(currentTravelLocation, UnitType.VisionRange);
                 }
                 currentTravelLocation = null;
             }
         }
     }
-
-    private void LateUpdate()
+    public void Initialize(int id, HexCell spawnCell, bool isEnemy)
     {
-        if(isEnemy && location != null)
-            location.EnableHighlight(Color.red);
+        this.isEnemy = isEnemy;
+
+        typeID = id;
+        unitType = HexGameUI.instance.unitTypes.unitTypeIDs[id];
+        health = UnitType.Health;
+
+        skinnedRenderers = GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
+        renderers = GetComponentsInChildren<MeshRenderer>().ToList();
+        if(!spawnCell.IsExplored || !spawnCell.IsVisible)
+        {
+            if (isEnemy)
+                DisplayRenderers(false);
+        }
+        else
+        {
+            if (isEnemy)
+                spawnCell.EnableHighlight(Color.red);
+        }
+    }
+
+    public void DisplayRenderers(bool show)
+    {
+        for (int i = 0; i < skinnedRenderers.Count; i++)
+        {
+            skinnedRenderers[i].material.color = show ? new Color(1,1,1,1) : new Color(0,0,0,0);
+        }
+        for (int i = 0; i < renderers.Count; i++)
+        {
+            renderers[i].material.color = show ? new Color(1, 1, 1, 1) : new Color(0, 0, 0, 0);
+        }
+    }
+    public IEnumerator DisplayRenderers(float aValue, float time)
+    {
+        print("VANISH");
+        float alpha = skinnedRenderers[0].material.color.a;
+        for (float t = 0; t < 1; t += Time.deltaTime / time)
+        {
+            print(t);
+            for (int i = 0; i < skinnedRenderers.Count; i++)
+            {
+                Color newColor = new Color(1, 1, 1, Mathf.Lerp(alpha, aValue, t));
+                skinnedRenderers[i].material.color = newColor;
+            }
+            for (int i = 0; i < renderers.Count; i++)
+            {
+                Color newColor = new Color(1, 1, 1, Mathf.Lerp(alpha, aValue, t));
+                renderers[i].material.color = newColor;
+            }
+
+            yield return null;
+        }
+        location.DisableHighlight();
     }
 
     public int GetMoveCost(HexCell fromCell, HexCell toCell, HexDirection direciton)
@@ -147,7 +190,6 @@ public class HexUnit : MonoBehaviour
     public void CalculateNextMove(HexGrid grid, List<HexUnit> unitsToCheck)
     {
         //da wae
-        attackRange = 3;
         List<HexUnit> allUnits = new List<HexUnit>(unitsToCheck);
         if (allUnits.Count == 0)
         {
@@ -160,8 +202,8 @@ public class HexUnit : MonoBehaviour
         bool canWalkThisPath = grid.Search(location, target.location, this, true);
         if (canWalkThisPath)
         {
-            List<HexCell> path = grid.GetPathWithoutExistCheck(Speed, target.location, location);
-            int reduceSteps = attackRange - 1;
+            List<HexCell> path = grid.GetPathWithoutExistCheck(UnitType.speed, target.location, location);
+            int reduceSteps = UnitType.attackRange - 1;
             if(path.Count > 1)
             {
                 if (path[path.Count - 1].Unit)
@@ -209,6 +251,7 @@ public class HexUnit : MonoBehaviour
         HexCell origin = location;
         if(path.Count != 0)
         {
+            //location.DisableHighlight();
             location.Unit = null;
             location = path[path.Count - 1];
         }
@@ -226,7 +269,7 @@ public class HexUnit : MonoBehaviour
         Vector3 a, b, c = pathToTravel[0].Position;
         yield return LookAt(pathToTravel[1].Position);
         animHandler.SetWalking(isTraveling);
-        Grid.DecreaseVisibility(currentTravelLocation ? currentTravelLocation : pathToTravel[0], VisionRange);
+        Grid.DecreaseVisibility(currentTravelLocation ? currentTravelLocation : pathToTravel[0], UnitType.VisionRange);
 
         float t = Time.deltaTime * travelSpeed;
         for (int i = 1; i < pathToTravel.Count; i++)
@@ -235,7 +278,7 @@ public class HexUnit : MonoBehaviour
             a = c;
             b = pathToTravel[i - 1].Position;
             c = (b + currentTravelLocation.Position) * 0.5f;
-            Grid.IncreaseVisibility(pathToTravel[i], VisionRange);
+            Grid.IncreaseVisibility(pathToTravel[i], UnitType.VisionRange);
 
             for (; t < 1; t += Time.deltaTime * travelSpeed)
             {
@@ -245,7 +288,7 @@ public class HexUnit : MonoBehaviour
                 transform.localRotation = Quaternion.LookRotation(d);
                 yield return null;
             }
-            Grid.DecreaseVisibility(pathToTravel[i], VisionRange);
+            Grid.DecreaseVisibility(pathToTravel[i], UnitType.VisionRange);
             t -= 1f;
         }
         currentTravelLocation = null;
@@ -253,7 +296,7 @@ public class HexUnit : MonoBehaviour
         a = c;
         b = location.Position;
         c = b;
-        Grid.IncreaseVisibility(location, VisionRange);
+        Grid.IncreaseVisibility(location, UnitType.VisionRange);
 
         for (; t < 1; t += Time.deltaTime * travelSpeed)
         {
@@ -277,7 +320,7 @@ public class HexUnit : MonoBehaviour
     IEnumerator TravelPathEnemy(HexCell attackCell, HexCell originalCell)
     {
         //TODO Attack if in reach
-        if (originalCell.coordinates.DistanceTo(attackCell.coordinates) <= attackRange)
+        if (originalCell.coordinates.DistanceTo(attackCell.coordinates) <= UnitType.attackRange)
         {
             InitAttack(attackCell, null); //TODO let this start after travel
             yield break;
@@ -286,7 +329,6 @@ public class HexUnit : MonoBehaviour
         Vector3 a, b, c = pathToTravel[0].Position;
         yield return LookAt(pathToTravel[1].Position);
         animHandler.SetWalking(isTraveling);
-        //Grid.DecreaseVisibility(currentTravelLocation ? currentTravelLocation : pathToTravel[0], VisionRange); //REMOVE
 
         float t = Time.deltaTime * travelSpeed;
         for (int i = 1; i < pathToTravel.Count; i++)
@@ -295,7 +337,6 @@ public class HexUnit : MonoBehaviour
             a = c;
             b = pathToTravel[i - 1].Position;
             c = (b + currentTravelLocation.Position) * 0.5f;
-            //Grid.IncreaseVisibility(pathToTravel[i], VisionRange); //REMOVE
 
             for (; t < 1; t += Time.deltaTime * travelSpeed)
             {
@@ -305,15 +346,15 @@ public class HexUnit : MonoBehaviour
                 transform.localRotation = Quaternion.LookRotation(d);
                 yield return null;
             }
-            //Grid.DecreaseVisibility(pathToTravel[i], VisionRange); //REMOVE
             t -= 1f;
+            if (currentTravelLocation.IsExplored && currentTravelLocation.IsVisible)
+                DisplayRenderers(true);
         }
         currentTravelLocation = null;
 
         a = c;
         b = location.Position;
         c = b;
-        //Grid.IncreaseVisibility(location, VisionRange); //REMOVE
 
         for (; t < 1; t += Time.deltaTime * travelSpeed)
         {
@@ -331,10 +372,9 @@ public class HexUnit : MonoBehaviour
         isTraveling = false;
         hasMovedThisTurn = true;
         animHandler.SetWalking(isTraveling);
-        //if (gameUI)
-        //    gameUI.AttackAfterCheck(attackCell);
         yield return null;
-        if(location.coordinates.DistanceTo(attackCell.coordinates) <= attackRange)
+        location.EnableHighlight(Color.red);
+        if(location.coordinates.DistanceTo(attackCell.coordinates) <= UnitType.attackRange)
             InitAttack(attackCell, null); 
         else
             hasTurned = true;
@@ -382,12 +422,12 @@ public class HexUnit : MonoBehaviour
     #region dmg
     public void DoDamage(HexUnit otherUnit)
     {
-        otherUnit.TakeDamage(damage); 
+        otherUnit.TakeDamage(UnitType.damage); 
     }
     public void TakeDamage(int damage)
     {
-        Health -= damage;
-        if(Health <= 0)
+        health -= damage;
+        if(health <= 0)
         {
             Die();
         }
@@ -398,7 +438,7 @@ public class HexUnit : MonoBehaviour
         {
             if (!isEnemy)
             {
-                Grid.DecreaseVisibility(location, VisionRange);
+                Grid.DecreaseVisibility(location, UnitType.VisionRange);
             }
         }
         location.Unit = null;
@@ -418,15 +458,17 @@ public class HexUnit : MonoBehaviour
         location.coordinates.Save(writer);
         writer.Write(orientation);
         writer.Write(isEnemy);
-        writer.Write(unitType);
+        writer.Write(typeID);
     }
     public static void Load(BinaryReader reader, HexGrid grid)
     {
         HexCoordinates coordinates = HexCoordinates.Load(reader);
         float orientation = reader.ReadSingle();
         bool isEnemy = reader.ReadBoolean();
-        //UnitType type = TODO save ID and get ID from list(heb de list al in scriptable object)
-        grid.AddUnit(Instantiate(unitPrefab), grid.GetCell(coordinates), orientation, isEnemy);
+        int typeID = reader.ReadInt32();
+        HexUnit u = Instantiate(unitPrefab);
+        u.Initialize(typeID, grid.GetCell(coordinates), isEnemy);
+        grid.AddUnit(u, grid.GetCell(coordinates), orientation);
     }
     #endregion
 }

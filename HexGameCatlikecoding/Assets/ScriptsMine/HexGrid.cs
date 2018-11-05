@@ -237,13 +237,13 @@ public class HexGrid : MonoBehaviour
         currentPathFrom = fromCell;
         currentPathTo = toCell;
         currentPathExists = Search(fromCell, toCell, unit);
-        ShowPath(unit.Speed, cellsToHighlight);
+        ShowPath(unit.UnitType.speed, cellsToHighlight);
         sw.Stop();
         //print(sw.ElapsedMilliseconds); //time to find new path
     }
     public bool Search(HexCell fromCell, HexCell toCell, HexUnit unit, bool isEnemy = false)
     {
-        int speed = unit.Speed;
+        int speed = unit.UnitType.speed;
         searchOpenNodesPhase += 2;
 
         if (searchOpenNodes == null)
@@ -322,7 +322,7 @@ public class HexGrid : MonoBehaviour
     public List<HexCell> SearchMovementArea(HexCell fromCell, int steps)
     {
         attackableCells.Clear();
-        int attackRange = fromCell.Unit.attackRange;
+        int attackRange = fromCell.Unit.UnitType.attackRange;
         List<HexCell> bonusChecks = new List<HexCell>();
 
         for (int i = 0; i < cells.Length; i++)
@@ -635,7 +635,7 @@ public class HexGrid : MonoBehaviour
         }
         for (int i = 0; i < units.Count; i++)
         {
-            IncreaseVisibility(units[i].Location, units[i].VisionRange);
+            IncreaseVisibility(units[i].Location, units[i].UnitType.VisionRange);
         }
     }
 
@@ -712,10 +712,9 @@ public class HexGrid : MonoBehaviour
         currentPathFrom.EnableHighlight(Color.blue);
     }
 
-    public void AddUnit(HexUnit unit, HexCell location, float orientation, bool isEnemy = false)
+    public void AddUnit(HexUnit unit, HexCell location, float orientation)
     {
         units.Add(unit);
-        unit.isEnemy = isEnemy;
         unit.Grid = this;   
         unit.transform.SetParent(transform, false);
         unit.Location = location;

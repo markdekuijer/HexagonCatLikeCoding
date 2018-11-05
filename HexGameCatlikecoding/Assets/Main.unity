@@ -3790,6 +3790,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grid: {fileID: 2065291061}
   text: {fileID: 1930884166}
+  unitTypes: {fileID: 11400000, guid: 13a60ccb7a97629438add94cd421d397, type: 2}
 --- !u!4 &646704821
 Transform:
   m_ObjectHideFlags: 0
