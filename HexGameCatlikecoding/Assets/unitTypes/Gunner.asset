@@ -14,6 +14,6 @@ MonoBehaviour:
   objectName: Gunner
   damage: 6
   Health: 5
-  speed: 5
+  speed: 7
   VisionRange: 6
   attackRange: 4

@@ -142,7 +142,7 @@ public class HexMapEditor : MonoBehaviour
         HexCell cell = GetCellUnderCursor();
         if (cell && !cell.Unit)
         {
-            HexUnit u = Instantiate(HexUnit.unitPrefab);
+            HexUnit u = Instantiate(HexGameUI.instance.unitTypes.unitTypeIDs[typeID].GetComponent<HexUnit>());
             u.Initialize(typeID, cell, isEnemy);
             hexGrid.AddUnit(u, cell, Random.Range(0f, 360f));
         }

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Name: UnitTypeIDs
   m_EditorClassIdentifier: 
   unitTypeIDs:
-  - {fileID: 11400000, guid: b4212de72ae475741bccddbfa192ecb9, type: 2}
-  - {fileID: 11400000, guid: fe18ea43a84d0ac46ae0ad1d06b169ba, type: 2}
-  - {fileID: 11400000, guid: 68e4545e02412c54c980579c1df19db0, type: 2}
-  - {fileID: 11400000, guid: f3c12628d9aa1814c9c7c4c9a5cf8426, type: 2}
-  - {fileID: 11400000, guid: 930b2969882382f4f969a1bcec55569b, type: 2}
+  - {fileID: 1604406722732384, guid: 88c4677bc11395f4dade5a0b79b8be1d, type: 2}
+  - {fileID: 1833905469882462, guid: d9c9fcb30cef99443b93d7ba584e79cd, type: 2}
+  - {fileID: 1862125026317542, guid: 77698d8676c356148b262f62f48d94fe, type: 2}
+  - {fileID: 1128265180895880, guid: d02132f90969729418b351dbb6d903b7, type: 2}
+  - {fileID: 1564239109678712, guid: 4f83aadb4274be744be7ff21257b4906, type: 2}
