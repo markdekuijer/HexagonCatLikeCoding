@@ -10,7 +10,7 @@
 		LOD 200
 
 		CGPROGRAM
-		#pragma surface surf StandardSpecular alpha vertex:vert// fullforwardshadows
+		#pragma surface surf StandardSpecular alpha vertex:vert
 		#pragma target 3.0
 
 		#pragma multi_compile _ HEX_MAP_EDIT_MODE

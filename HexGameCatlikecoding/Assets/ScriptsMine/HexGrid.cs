@@ -63,8 +63,6 @@ public class HexGrid : MonoBehaviour
 
     public void CreateAllyAndEnemyList()
     {
-        //loop through units. also in the Load function
-        //if enemy check. then add to turnbased.instance.list....
         for (int i = 0; i < units.Count; i++)
         {
             if (!units[i].isEnemy)
@@ -235,7 +233,9 @@ public class HexGrid : MonoBehaviour
         currentPathExists = Search(fromCell, toCell, unit);
         ShowPath(unit.unitType.speed, cellsToHighlight);
         sw.Stop();
-        //print(sw.ElapsedMilliseconds); //time to find new path
+
+
+        print(sw.ElapsedMilliseconds);
     }
     public bool Search(HexCell fromCell, HexCell toCell, HexUnit unit, bool isEnemy = false)
     {
@@ -360,8 +360,8 @@ public class HexGrid : MonoBehaviour
                 }
                 if (neighbor.Unit)
                 {
-                    //if (neighbor.Unit.isEnemy)
-                        //attackableCells.Add(neighbor); //TODO extend this for ranged attacks (use int attackRange bovenaan deze void);
+                    if (neighbor.Unit.isEnemy)
+                        attackableCells.Add(neighbor);
 
                     continue;
                 }
@@ -472,8 +472,12 @@ public class HexGrid : MonoBehaviour
                     neighbor.PathFrom = current;
                     if (neighbor.Explorable)
                     {
-                        //neighbor.EnableHighlight(Color.white);
-                        cellsToHighlight.Add(neighbor);
+                        if(neighbor.Unit)
+                            if (neighbor.Unit.isEnemy)
+                            {
+                                neighbor.EnableHighlight(Color.red);
+                                cellsToHighlight.Add(neighbor);
+                            }
                     }
                     frontier.Add(neighbor);
                 }
@@ -536,7 +540,6 @@ public class HexGrid : MonoBehaviour
                     neighbor.PathFrom = current;
                     if (neighbor.Explorable)
                     {
-                        //neighbor.EnableHighlight(Color.white);
                         cellsToHighlight.Add(neighbor);
                     }
                     frontier.Add(neighbor);
@@ -548,8 +551,13 @@ public class HexGrid : MonoBehaviour
         {
             if(cellsToHighlight[i] != fromCell)
             {
-                attackableCells.Add(cellsToHighlight[i]);
-                //cellsToHighlight[i].EnableHighlight(Color.black);
+                if(cellsToHighlight[i].Unit)
+                    if (cellsToHighlight[i].Unit.isEnemy)
+                    {
+                        attackableCells.Add(cellsToHighlight[i]);
+                        cellsToHighlight[i].EnableHighlight(Color.red);
+                    }
+
             }
         }
     }
@@ -580,7 +588,7 @@ public class HexGrid : MonoBehaviour
             for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
             {
                 HexCell neighbor = current.GetNeighbor(d);
-                if (neighbor == null || neighbor.SearchPhase > searchOpenNodesPhase || !neighbor.Explorable) //TODO explorable goes wrong on large map
+                if (neighbor == null || neighbor.SearchPhase > searchOpenNodesPhase || !neighbor.Explorable)
                     continue;
 
                 int distance = current.Distance + 1;
@@ -695,7 +703,6 @@ public class HexGrid : MonoBehaviour
                     current.EnableHighlight(Color.grey);
                 current = current.PathFrom;
             }
-            currentPathTo.EnableHighlight(Color.red);
         }
         else
         {

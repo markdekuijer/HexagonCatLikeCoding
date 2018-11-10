@@ -83,6 +83,12 @@ public class HexGameUI : MonoBehaviour
                         CloseSelect();
                         return true;
                     }
+                    //else
+                    //{
+                    //    print("reee");
+                    //    DoMove(selectedUnit.unitType.speed, GetCell());
+                    //    return true;
+                    //}
                 }
             }
         }
@@ -152,18 +158,15 @@ public class HexGameUI : MonoBehaviour
                     cellsToHighlights = grid.SearchMovementArea(selectedUnit.Location, selectedUnit.unitType.speed);
                     for (int i = 0; i < grid.attackableCells.Count; i++)
                     {
-                        //grid.attackableCells[i].EnableHighlight(Color.black);
+                        if (grid.attackableCells[i].Unit)
+                            if (grid.attackableCells[i].Unit.isEnemy)
+                                grid.attackableCells[i].EnableHighlight(Color.red);
                     }
                 }
                 else if (!selectedUnit.hasAttackThisTurn)
                 {
                     List<HexCell> showAttackRange = new List<HexCell>();
                     showAttackRange = grid.searchAttackArea(selectedUnit.Location, selectedUnit.unitType.attackRange);
-
-                    for (int i = 0; i < showAttackRange.Count; i++)
-                    {
-                        //showAttackRange[i].EnableHighlight(Color.black);
-                    }
                 }
                 else
                     cellsToHighlights = new List<HexCell>() { currentCell };

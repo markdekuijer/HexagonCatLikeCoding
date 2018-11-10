@@ -306,7 +306,6 @@ public class HexCell : MonoBehaviour
         set
         {
             distance = value;
-            //UpdateDistanceLabel();
         }
     }
 
@@ -338,7 +337,6 @@ public class HexCell : MonoBehaviour
         }
     }
     public bool Explorable { get; set; }
-    //TODO hier gaat wat mis op grate maps
 
     int visibility;
     public bool IsVisible
@@ -498,11 +496,6 @@ public class HexCell : MonoBehaviour
     }
     #endregion
 
-    //void UpdateDistanceLabel()  disable SetLabel when using this method
-    //{
-    //    Text label = uiRect.GetComponent<Text>();
-    //    label.text = distance == int.MaxValue ? "" : distance.ToString();
-    //}
     public void SetLabel(string text)
     {
         Text Label = uiRect.GetComponent<Text>();
@@ -612,6 +605,7 @@ public class HexCell : MonoBehaviour
         }
         IsExplored = header >= 3 ? reader.ReadBoolean() : false;
         ShaderData.RefreshVisibility(this);
+
         //SetLabel(coordinates.ToString()); TODO show labels
     }
 

@@ -111,12 +111,7 @@ public class HexUnit : MonoBehaviour
         if(!spawnCell.IsExplored || !spawnCell.IsVisible)
         {
             if (isEnemy)
-                DisplayRenderers(false);
-        }
-        else
-        {
-            if (isEnemy)
-                spawnCell.EnableHighlight(Color.red);
+                DisplayRenderers(true);
         }
     }
 
@@ -149,7 +144,6 @@ public class HexUnit : MonoBehaviour
 
             yield return null;
         }
-        location.DisableHighlight();
     }
 
     public int GetMoveCost(HexCell fromCell, HexCell toCell, HexDirection direciton)
@@ -177,7 +171,6 @@ public class HexUnit : MonoBehaviour
     }
     public void CalculateNextMove(HexGrid grid, List<HexUnit> unitsToCheck)
     {
-        //da wae
         List<HexUnit> allUnits = new List<HexUnit>(unitsToCheck);
         if (allUnits.Count == 0)
         {
@@ -306,10 +299,9 @@ public class HexUnit : MonoBehaviour
     }
     IEnumerator TravelPathEnemy(HexCell attackCell, HexCell originalCell)
     {
-        //TODO Attack if in reach
         if (originalCell.coordinates.DistanceTo(attackCell.coordinates) <= unitType.attackRange)
         {
-            InitAttack(attackCell, null); //TODO let this start after travel
+            InitAttack(attackCell, null); 
             yield break;
         }
         isTraveling = true;
@@ -360,7 +352,6 @@ public class HexUnit : MonoBehaviour
         hasMovedThisTurn = true;
         animHandler.SetWalking(isTraveling);
         yield return null;
-        location.EnableHighlight(Color.red);
         if(location.coordinates.DistanceTo(attackCell.coordinates) <= unitType.attackRange)
             InitAttack(attackCell, null); 
         else
@@ -380,7 +371,7 @@ public class HexUnit : MonoBehaviour
         hasAttackThisTurn = true;
         if(gameUI)
             gameUI.CloseSelect();
-        DoDamage(attackedCell.Unit);
+        DoDamage(attackedCell.Unit); 
         yield return new WaitForSeconds(2f);
         hasTurned = true;
     }
