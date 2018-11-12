@@ -40,6 +40,7 @@ public class HexMapEditor : MonoBehaviour
     public UnitType spearSoldier;
     public UnitType archer;
     public UnitType gunner;
+    public UnitType castle;
     bool spawnEnemy;
 
     void Awake()
@@ -100,6 +101,14 @@ public class HexMapEditor : MonoBehaviour
                     DestroyUnit();
                 else
                     CreateUnit(4, spawnEnemy);
+                return;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha6))
+            {
+                if (Input.GetKey(KeyCode.LeftShift))
+                    DestroyUnit();
+                else
+                    CreateUnit(5, spawnEnemy);
                 return;
             }
         }

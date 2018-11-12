@@ -13,12 +13,12 @@ public class NewMapMenu : MonoBehaviour
 
     public void CreateSmallMap()
     {
-        CreateMap(20, 15);
+        CreateMap(15, 20);
     }
 
     public void CreateMediumMap()
     {
-        CreateMap(40, 30);
+        CreateMap(30, 50);
     }
 
     public void CreateLargeMap()

@@ -670,36 +670,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   urbanCollectoins:
   - prefabs:
-    - {fileID: 4000011812086372, guid: 21b1020286582424ab6d62085ed5ee87, type: 2}
-    - {fileID: 4000011812086372, guid: 5d26578fd32c84d1ab4d755ab7f23577, type: 2}
+    - {fileID: 4023475706339860, guid: 5e7acd5c13a890848bb5f3c3e984f256, type: 2}
   - prefabs:
-    - {fileID: 4000013436407900, guid: 89adbf41f320f4141964bfa388ba2865, type: 2}
-    - {fileID: 4000013436407900, guid: 2fad1b4af64d84c8e810f040299dec1e, type: 2}
+    - {fileID: 4084053841597656, guid: a34cee3af444d2b418fa1c6d2536e286, type: 2}
   - prefabs:
-    - {fileID: 4000013997932258, guid: bca46d0c670c447a0a5c7208498000ab, type: 2}
-    - {fileID: 4000013997932258, guid: 4c4b904516a814dc7b4433a49713c96f, type: 2}
+    - {fileID: 4562781219335246, guid: 970c1ee43fecde84ba0f0c7111262394, type: 2}
   farmCollections:
   - prefabs:
-    - {fileID: 4000011812086372, guid: cc82f4b5b1845cb478f0e1ab6a8f65f7, type: 2}
-    - {fileID: 4000011812086372, guid: 085691db155e7b249b3ed0ac02d1ea95, type: 2}
+    - {fileID: 4144232553114474, guid: 12a066159a0ea76468be9f6fab8830d2, type: 2}
   - prefabs:
-    - {fileID: 4000013436407900, guid: be259ecd17588bf4d9b953341480944d, type: 2}
-    - {fileID: 4000013436407900, guid: f11ca8e0faf58c740bf7255d657a4134, type: 2}
+    - {fileID: 4829292172934974, guid: 3a7b45299de877442bf2eff800efb02f, type: 2}
   - prefabs:
-    - {fileID: 4000013997932258, guid: 978467abeca7c54449b152d0f858f8bb, type: 2}
-    - {fileID: 4000013997932258, guid: 84163f731061d064b80330df0b9b976b, type: 2}
+    - {fileID: 4397300837460924, guid: 0fe9a233c039cdd41973125933ea1f77, type: 2}
   plantCollections:
   - prefabs:
-    - {fileID: 4000011812086372, guid: b661565d13e1d2c429a9d04db38acfde, type: 2}
-    - {fileID: 4000011812086372, guid: f554dd418b7ee91419c1478d78116994, type: 2}
+    - {fileID: 4217777389282168, guid: 500d01f732b87f5409034bdc2037850d, type: 2}
+    - {fileID: 4556535541666952, guid: 08ee811ea86198545ae4b8238e14c655, type: 2}
   - prefabs:
-    - {fileID: 4000013436407900, guid: e30119d0bccacdb4c99e3f2e2cce391b, type: 2}
-    - {fileID: 4000013436407900, guid: 62238961ca4eb984a9a261ffa628813d, type: 2}
+    - {fileID: 4733168848046154, guid: 7db29aab7ea34a94189e5d3d6c5e69d3, type: 2}
+    - {fileID: 4090238202389556, guid: be792829959c6a74fa246eda0a7de58a, type: 2}
   - prefabs:
-    - {fileID: 4000013997932258, guid: c1e734751215110409fc99170b0ff0ab, type: 2}
-    - {fileID: 4000013997932258, guid: 69b7a44692c7c6947a45a24f363004e1, type: 2}
+    - {fileID: 4674743333959700, guid: e9b033c227eade64c8a739be0dc7da90, type: 2}
+    - {fileID: 4579544774874796, guid: 6a74c5b659088e043932a6e5dfac173a, type: 2}
   specials:
-  - {fileID: 4000013750885840, guid: f2967fed6444e43559e32916c2465d27, type: 2}
+  - {fileID: 4174869356022002, guid: 6dfac527f44f45a4a8107ecaf4168dec, type: 2}
   - {fileID: 4000011263270592, guid: cb7be9a74fd6e4cbdb5be2ac7319e699, type: 2}
   - {fileID: 4000012893891830, guid: cc90e6fbc542a40c080d2c64da7d26ed, type: 2}
   walls: {fileID: 114752036998531874}

@@ -73,6 +73,18 @@ public class HexUnit : MonoBehaviour
     public UnitType unitType;
     public int typeID;
     int health;
+    public int Health
+    {
+        get
+        {
+            return health;
+        }
+        private set
+        {
+            if(health != value)
+                health = value;
+        }
+    }
 
 
     public void ValidatePosition()
@@ -413,7 +425,14 @@ public class HexUnit : MonoBehaviour
     }
     public void Die()
     {
-        if (location) //TODO remove this to keep location
+        if(unitType.objectName == "castle")
+        {
+            //TODO start gameover system;
+            print("GAME OVER");
+            return;
+        }
+
+        if (location) 
         {
             if (!isEnemy)
             {

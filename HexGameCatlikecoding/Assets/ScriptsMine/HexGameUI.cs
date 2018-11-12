@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class HexGameUI : MonoBehaviour
 {
     public HexGrid grid;
+    public UnitPanel unitPanel;
     public UnityEngine.UI.Text text;
 
     HexCell currentCell;
@@ -128,6 +129,7 @@ public class HexGameUI : MonoBehaviour
     }
     public void CloseSelect()
     {
+        unitPanel.gameObject.SetActive(false);
         selectedUnit = null;
         for (int i = 0; i < cellsToHighlights.Count; i++)
         {
@@ -150,6 +152,16 @@ public class HexGameUI : MonoBehaviour
                 if (currentCell.Unit.IsTraveling || currentCell.Unit.isEnemy)
                     return;
 
+                if (currentCell.Unit.unitType.objectName == "castle")
+                {
+                    print("selected castle");
+                    print("display stuff");
+                    return;
+                }
+
+                unitPanel.gameObject.SetActive(true);
+                unitPanel.StartDisplay(currentCell.Unit);
+
                 selectedUnit = currentCell.Unit;
                 cellsToHighlights.Clear();
 
@@ -170,6 +182,11 @@ public class HexGameUI : MonoBehaviour
                 }
                 else
                     cellsToHighlights = new List<HexCell>() { currentCell };
+            }
+            else if (currentCell.SpecialIndex == 1)
+            {
+                print("OpenSpawnMenu");
+                //openSpawnMenu(currentCell);
             }
         }
     }
