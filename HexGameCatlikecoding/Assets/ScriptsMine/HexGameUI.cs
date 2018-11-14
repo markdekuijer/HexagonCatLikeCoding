@@ -6,6 +6,7 @@ public class HexGameUI : MonoBehaviour
 {
     public HexGrid grid;
     public UnitPanel unitPanel;
+    public UnitSpawner spawnPanel;
     public UnityEngine.UI.Text text;
 
     HexCell currentCell;
@@ -147,6 +148,16 @@ public class HexGameUI : MonoBehaviour
         UpdateCurrentCell();
         if (currentCell)
         {
+            if(currentCell.SpecialIndex == 1)
+            {
+                if (!currentCell.Unit)
+                {
+                    spawnPanel.gameObject.SetActive(true);
+                    spawnPanel.currentSelectedSpawner = currentCell;
+                    return;
+                }
+            }
+
             if (currentCell.Unit)
             {
                 if (currentCell.Unit.IsTraveling || currentCell.Unit.isEnemy)
@@ -182,11 +193,6 @@ public class HexGameUI : MonoBehaviour
                 }
                 else
                     cellsToHighlights = new List<HexCell>() { currentCell };
-            }
-            else if (currentCell.SpecialIndex == 1)
-            {
-                print("OpenSpawnMenu");
-                //openSpawnMenu(currentCell);
             }
         }
     }
