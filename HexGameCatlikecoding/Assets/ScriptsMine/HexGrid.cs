@@ -233,9 +233,7 @@ public class HexGrid : MonoBehaviour
         currentPathExists = Search(fromCell, toCell, unit);
         ShowPath(unit.unitType.speed, cellsToHighlight);
         sw.Stop();
-
-
-        print(sw.ElapsedMilliseconds);
+        //print(sw.ElapsedMilliseconds);
     }
     public bool Search(HexCell fromCell, HexCell toCell, HexUnit unit, bool isEnemy = false)
     {

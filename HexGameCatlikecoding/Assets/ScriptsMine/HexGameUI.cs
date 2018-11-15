@@ -6,6 +6,7 @@ public class HexGameUI : MonoBehaviour
 {
     public HexGrid grid;
     public UnitPanel unitPanel;
+    public CastlePanel castlePanel;
     public UnitSpawner spawnPanel;
     public UnityEngine.UI.Text text;
 
@@ -125,12 +126,14 @@ public class HexGameUI : MonoBehaviour
 
     HexCell GetCell()
     {
-        HexCell cell = grid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition));
-        return cell;
+        return grid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition));
     }
+
     public void CloseSelect()
     {
         unitPanel.gameObject.SetActive(false);
+        castlePanel.gameObject.SetActive(false);
+        spawnPanel.gameObject.SetActive(false);
         selectedUnit = null;
         for (int i = 0; i < cellsToHighlights.Count; i++)
         {
@@ -144,11 +147,17 @@ public class HexGameUI : MonoBehaviour
 
     void DoSelect()
     {
+
+
         grid.ClearPath();
         UpdateCurrentCell();
         if (currentCell)
         {
-            if(currentCell.SpecialIndex == 1)
+            castlePanel.gameObject.SetActive(false);
+            unitPanel.gameObject.SetActive(false);
+            spawnPanel.gameObject.SetActive(false);
+
+            if (currentCell.SpecialIndex == 1)
             {
                 if (!currentCell.Unit)
                 {
@@ -166,10 +175,11 @@ public class HexGameUI : MonoBehaviour
                 if (currentCell.Unit.unitType.objectName == "castle")
                 {
                     print("selected castle");
-                    print("display stuff");
+                    castlePanel.gameObject.SetActive(true);
+                    castlePanel.SetPanel(currentCell.Unit.unitType.Health, currentCell.Unit.Health);
                     return;
                 }
-
+  
                 unitPanel.gameObject.SetActive(true);
                 unitPanel.StartDisplay(currentCell.Unit);
 

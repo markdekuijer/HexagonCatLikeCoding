@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectName: castle
   damage: 0
-  Health: 1
+  Health: 100
   speed: 0
   VisionRange: 10
   attackRange: 0

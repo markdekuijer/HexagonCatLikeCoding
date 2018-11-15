@@ -14,6 +14,6 @@ MonoBehaviour:
   objectName: Archer
   damage: 4
   Health: 8
-  speed: 16
+  speed: 14
   VisionRange: 5
   attackRange: 3

@@ -606,6 +606,8 @@ public class HexCell : MonoBehaviour
         IsExplored = header >= 3 ? reader.ReadBoolean() : false;
         ShaderData.RefreshVisibility(this);
 
+        if (specialIndex == 2)
+            TurnbasedManager.Instance.enemySpawns.Add(this);
         //SetLabel(coordinates.ToString()); TODO show labels
     }
 

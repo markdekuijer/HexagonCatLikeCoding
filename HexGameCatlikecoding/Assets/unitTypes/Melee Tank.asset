@@ -14,6 +14,6 @@ MonoBehaviour:
   objectName: Melee Tank
   damage: 3
   Health: 20
-  speed: 16
+  speed: 13
   VisionRange: 3
   attackRange: 1

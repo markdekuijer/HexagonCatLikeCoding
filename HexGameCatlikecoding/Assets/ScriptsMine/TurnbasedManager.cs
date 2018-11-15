@@ -13,10 +13,10 @@ public class TurnbasedManager : MonoBehaviour
 
     public List<HexUnit> allyUnits = new List<HexUnit>();
     public List<HexUnit> enemyUnits = new List<HexUnit>();
+    public List<HexCell> enemySpawns = new List<HexCell>();
 
     private void Awake()
     {
-        print("reeeee");
         if (Instance == null)
             Instance = this;
     }
@@ -66,10 +66,23 @@ public class TurnbasedManager : MonoBehaviour
     }
     IEnumerator GoThroughEnemys()
     {
-        print("enemy Moving");
-        print(enemyUnits.Count);
+        if (currentTurn % 4 == 0)
+        {
+            for (int i = 0; i < enemySpawns.Count; i++)
+            {
+
+                int index = Random.Range(0, 5);
+                HexUnit u = Instantiate(HexGameUI.instance.unitTypes.unitTypeIDs[index].GetComponent<HexUnit>());
+                u.Initialize(index, enemySpawns[i], true);
+                u.Grid = grid;
+                u.Location = enemySpawns[i];
+                TurnbasedManager.Instance.enemyUnits.Add(u);
+            }
+        }
         for (int i = 0; i < enemyUnits.Count; i++)
         {
+            if (enemyUnits[i].unitType.objectName == "castle")
+                continue;
             enemyUnits[i].CalculateNextMove(grid, allyUnits);
             while (!enemyUnits[i].hasTurned)
             {

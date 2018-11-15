@@ -694,7 +694,7 @@ MonoBehaviour:
     - {fileID: 4579544774874796, guid: 6a74c5b659088e043932a6e5dfac173a, type: 2}
   specials:
   - {fileID: 4174869356022002, guid: 6dfac527f44f45a4a8107ecaf4168dec, type: 2}
-  - {fileID: 4000011263270592, guid: cb7be9a74fd6e4cbdb5be2ac7319e699, type: 2}
+  - {fileID: 4174869356022002, guid: 6dfac527f44f45a4a8107ecaf4168dec, type: 2}
   - {fileID: 4000012893891830, guid: cc90e6fbc542a40c080d2c64da7d26ed, type: 2}
   walls: {fileID: 114752036998531874}
   wallTower: {fileID: 4383942703154090, guid: 68e13350ca84781408b829de4ef8a2d6, type: 2}

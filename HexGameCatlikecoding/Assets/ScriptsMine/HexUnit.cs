@@ -81,7 +81,7 @@ public class HexUnit : MonoBehaviour
         }
         private set
         {
-            if(health != value)
+            if (health != value)
                 health = value;
         }
     }

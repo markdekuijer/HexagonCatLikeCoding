@@ -16,6 +16,7 @@ public class UnitPanel : MonoBehaviour
 
     public void StartDisplay(HexUnit u)
     {
+        print("START DISPLAY");
         nameText.text = u.unitType.objectName;
         healthText.text = u.Health.ToString();
         attackText.text = u.unitType.damage.ToString();
