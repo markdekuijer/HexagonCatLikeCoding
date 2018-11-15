@@ -378,6 +378,7 @@ public class HexUnit : MonoBehaviour
     IEnumerator Attack(HexCell attackedCell, HexGameUI gameUI)
     {
         yield return LookAt(attackedCell.Position);
+        Grid.IncreaseVisibility(location, unitType.attackRange);
         animHandler.InitAttack();
         hasMovedThisTurn = true;
         hasAttackThisTurn = true;
