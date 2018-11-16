@@ -27,6 +27,9 @@ public class HexUnitAnimator : MonoBehaviour
     }
     public void Die()
     {
+        if (isDead)
+            return;
+
         anim.SetTrigger("Die");
         StartCoroutine(DieTimer());
     }

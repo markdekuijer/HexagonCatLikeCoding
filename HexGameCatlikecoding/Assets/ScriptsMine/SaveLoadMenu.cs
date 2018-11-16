@@ -14,6 +14,8 @@ public class SaveLoadMenu : MonoBehaviour
 
     const int mapFileVersion = 4;
 
+    string lastUsedPath;
+
     string GetSelectedPath()
     {
         string mapName = nameInput.text;
@@ -22,6 +24,11 @@ public class SaveLoadMenu : MonoBehaviour
             return null;
         }
         return Path.Combine(Application.persistentDataPath, mapName + ".map");
+    }
+
+    private void Start()
+    {
+        Load(Path.Combine(Application.persistentDataPath, "11" + ".map"));
     }
 
     public void Action()
@@ -69,7 +76,13 @@ public class SaveLoadMenu : MonoBehaviour
             else
                 Debug.LogWarning("Unknown map format " + header);
         }
+        lastUsedPath = path;
         Close();
+    }
+
+    public void ReloadMap()
+    {
+        Load(lastUsedPath);
     }
 
     public void Delete()

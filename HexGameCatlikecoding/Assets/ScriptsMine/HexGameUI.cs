@@ -8,7 +8,12 @@ public class HexGameUI : MonoBehaviour
     public UnitPanel unitPanel;
     public CastlePanel castlePanel;
     public UnitSpawner spawnPanel;
-    public UnityEngine.UI.Text text;
+    public UnityEngine.UI.Text debugText;
+
+    public GameObject gameoverPanel;
+    public UnityEngine.UI.Text gameoverText;
+    public GameObject baseUI;
+    public SaveLoadMenu saveLoadMenu;
 
     HexCell currentCell;
     HexUnit selectedUnit;
@@ -31,6 +36,9 @@ public class HexGameUI : MonoBehaviour
 
         if (!EventSystem.current.IsPointerOverGameObject())
         {
+            if (!TurnbasedManager.Instance.playerTurn)
+                return;
+
             if (selectedUnit)
             {
                 if (Input.GetMouseButtonDown(0))
@@ -86,12 +94,6 @@ public class HexGameUI : MonoBehaviour
                         CloseSelect();
                         return true;
                     }
-                    //else
-                    //{
-                    //    print("reee");
-                    //    DoMove(selectedUnit.unitType.speed, GetCell());
-                    //    return true;
-                    //}
                 }
             }
         }
@@ -198,8 +200,7 @@ public class HexGameUI : MonoBehaviour
                 }
                 else if (!selectedUnit.hasAttackThisTurn)
                 {
-                    List<HexCell> showAttackRange = new List<HexCell>();
-                    showAttackRange = grid.searchAttackArea(selectedUnit.Location, selectedUnit.unitType.attackRange);
+                    List<HexCell> showAttackRange = grid.SearchAttackArea(selectedUnit.Location, selectedUnit.unitType.attackRange);
                 }
                 else
                     cellsToHighlights = new List<HexCell>() { currentCell };
@@ -210,7 +211,7 @@ public class HexGameUI : MonoBehaviour
     {
         HexCell currentCell = GetCell();
         if (currentCell)
-            text.text = currentCell.coordinates.ToString();
+            debugText.text = currentCell.coordinates.ToString();
     }
 
     void DoPathfinding()
@@ -283,5 +284,37 @@ public class HexGameUI : MonoBehaviour
     public void EndTurn()
     {
         TurnbasedManager.Instance.InitNextTurn();
+    }
+    public void InitGameOver(string gameoverString)
+    {
+        castlePanel.gameObject.SetActive(false);
+        spawnPanel.gameObject.SetActive(false);
+        unitPanel.gameObject.SetActive(false);
+
+        gameoverPanel.SetActive(true);
+        gameoverText.text = gameoverString;
+    }
+    public void ReturnToMainMenu()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+
+    }
+    public void ReplayLevel()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+    }
+    public void ClearGameData()
+    {
+        grid.ClearVisibility();
+
+        for (int i = 0; i < grid.units.Count; i++)
+        {
+            grid.units[i].Die();
+        }
+
+        TurnbasedManager.Instance.allyUnits.Clear();
+        TurnbasedManager.Instance.enemyUnits.Clear();
+        TurnbasedManager.Instance.enemySpawns.Clear();
+        grid.units.Clear();
     }
 }

@@ -51,6 +51,9 @@ public class HexUnit : MonoBehaviour
             if(!isEnemy)
                 Grid.IncreaseVisibility(value, unitType.VisionRange);
             transform.localPosition = value.Position;
+
+            if (!location.IsExplored || !location.Explorable)
+                DisplayRenderers(false);
         }
     }
 
@@ -373,12 +376,12 @@ public class HexUnit : MonoBehaviour
     #region attack
     public void InitAttack(HexCell cell, HexGameUI gameUI)
     {
-        StartCoroutine(Attack(cell, gameUI));
+        if(location.IsExplored)
+            StartCoroutine(Attack(cell, gameUI));
     }
     IEnumerator Attack(HexCell attackedCell, HexGameUI gameUI)
     {
         yield return LookAt(attackedCell.Position);
-        Grid.IncreaseVisibility(location, unitType.attackRange);
         animHandler.InitAttack();
         hasMovedThisTurn = true;
         hasAttackThisTurn = true;
@@ -428,8 +431,12 @@ public class HexUnit : MonoBehaviour
     {
         if(unitType.objectName == "castle")
         {
-            //TODO start gameover system;
-            print("GAME OVER");
+            string gameoverString;
+            if (!isEnemy)
+                gameoverString = "You Lost!";
+            else
+                gameoverString = "You Won!";
+            HexGameUI.instance.InitGameOver(gameoverString);
             return;
         }
 

@@ -900,6 +900,21 @@ public class HexGridChunk : MonoBehaviour
     {
         enabled = true;
     }
+    public void RefreshVisibility()
+    {
+        for (int i = 0; i < cells.Length; i++)
+        {
+            cells[i].ShaderData.RefreshVisibility(cells[i]);
+        }
+    }
+    public void ClearVisibility()
+    {
+        for (int i = 0; i < cells.Length; i++)
+        {
+            cells[i].explored = false;
+            cells[i].DecreaseVisibility();
+        }
+    }
 
     public void ShowUI(bool visible)
     {

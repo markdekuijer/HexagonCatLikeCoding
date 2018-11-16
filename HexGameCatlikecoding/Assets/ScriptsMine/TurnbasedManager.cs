@@ -7,7 +7,9 @@ public class TurnbasedManager : MonoBehaviour
     public static TurnbasedManager Instance;
 
     public HexGrid grid;
-    public bool playerTurn = true;
+    public GameObject endTurnButton;
+    public bool playerTurn;
+    bool enemyTurned;
 
     int currentTurn;
 
@@ -21,18 +23,24 @@ public class TurnbasedManager : MonoBehaviour
             Instance = this;
     }
 
-    bool enemyTurned;
+    private void Start()
+    {
+        enemyTurned = true;
+        playerTurn = true;
+    }
+
     void Update ()
     {
         if (playerTurn)
         {
-
+            endTurnButton.SetActive(true);
         }
         else
         {
             if (enemyTurned)
                 return;
 
+            endTurnButton.SetActive(false);
             StartCoroutine(GoThroughEnemys());
             enemyTurned = true;
         }
@@ -66,10 +74,10 @@ public class TurnbasedManager : MonoBehaviour
     }
     IEnumerator GoThroughEnemys()
     {
-        if (currentTurn % 4 == 0)
-        {
             for (int i = 0; i < enemySpawns.Count; i++)
             {
+                if (Random.Range(0, 1) > 0.5)
+                    continue;
 
                 int index = Random.Range(0, 5);
                 HexUnit u = Instantiate(HexGameUI.instance.unitTypes.unitTypeIDs[index].GetComponent<HexUnit>());
@@ -78,7 +86,6 @@ public class TurnbasedManager : MonoBehaviour
                 u.Location = enemySpawns[i];
                 TurnbasedManager.Instance.enemyUnits.Add(u);
             }
-        }
         for (int i = 0; i < enemyUnits.Count; i++)
         {
             if (enemyUnits[i].unitType.objectName == "castle")

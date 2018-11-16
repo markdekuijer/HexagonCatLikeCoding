@@ -405,12 +405,12 @@ public class HexGrid : MonoBehaviour
         }
         for (int i = 0; i < bonusChecks.Count; i++)
         {
-            searchExtendingAttackArea(bonusChecks[i], attackRange);
+            SearchExtendingAttackArea(bonusChecks[i], attackRange);
         }
 
         return cellsToHighlight;
     }
-    public List<HexCell> searchAttackArea(HexCell fromCell, int range)
+    public List<HexCell> SearchAttackArea(HexCell fromCell, int range)
     {
         if (range == 0)
             return new List<HexCell>();
@@ -484,7 +484,7 @@ public class HexGrid : MonoBehaviour
         }
         return cellsToHighlight;
     }
-    public void searchExtendingAttackArea(HexCell fromCell, int range)
+    public void SearchExtendingAttackArea(HexCell fromCell, int range)
     {
         if (range == 0)
             return;
@@ -740,6 +740,20 @@ public class HexGrid : MonoBehaviour
         for (int i = 0; i < chunks.Length; i++)
         {
             chunks[i].ShowUI(visible);
+        }
+    }
+    public void ClearVisibility()
+    {
+        for (int i = 0; i < chunks.Length; i++)
+        {
+            chunks[i].ClearVisibility();
+        }
+    }
+    public void RefreshVisibility()
+    {
+        for (int i = 0; i < chunks.Length; i++)
+        {
+            chunks[i].RefreshVisibility();
         }
     }
 
