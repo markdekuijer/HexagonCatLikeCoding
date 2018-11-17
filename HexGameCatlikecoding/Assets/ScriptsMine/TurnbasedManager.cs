@@ -56,11 +56,12 @@ public class TurnbasedManager : MonoBehaviour
         playerTurn = !playerTurn;
         if (playerTurn)
         {
-            for (int i = 0; i < grid.units.Count; i++)
+            for (int i = 0; i < allyUnits.Count; i++)
             {
-                grid.units[i].hasMovedThisTurn = false;
-                grid.units[i].hasAttackThisTurn = false;
-                grid.units[i].hasTurned = false;
+                allyUnits[i].hasMovedThisTurn = false;
+                allyUnits[i].hasAttackThisTurn = false;
+                allyUnits[i].hasTurned = false;
+                print("asas");
             }
             print("playerTurnStart");
             HexGameUI.instance.CloseSelect();
@@ -68,6 +69,12 @@ public class TurnbasedManager : MonoBehaviour
         }
         else
         {
+            for (int i = 0; i < enemyUnits.Count; i++)
+            {
+                enemyUnits[i].hasMovedThisTurn = false;
+                enemyUnits[i].hasAttackThisTurn = false;
+                enemyUnits[i].hasTurned = false;
+            }
             print("enemyTurnStart");
         }
         enemyTurned = false;
