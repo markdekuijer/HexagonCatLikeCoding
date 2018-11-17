@@ -149,8 +149,6 @@ public class HexGameUI : MonoBehaviour
 
     void DoSelect()
     {
-
-
         grid.ClearPath();
         UpdateCurrentCell();
         if (currentCell)

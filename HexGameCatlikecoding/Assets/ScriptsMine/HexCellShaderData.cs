@@ -136,7 +136,6 @@ public class HexCellShaderData : MonoBehaviour
         {
             if (cell.Unit.isEnemy)
             {
-
                 if (cell.IsVisible)
                     cell.Unit.DisplayRenderers(true);
                 else

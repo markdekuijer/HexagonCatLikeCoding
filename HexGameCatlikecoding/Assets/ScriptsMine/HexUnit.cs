@@ -51,9 +51,6 @@ public class HexUnit : MonoBehaviour
             if(!isEnemy)
                 Grid.IncreaseVisibility(value, unitType.VisionRange);
             transform.localPosition = value.Position;
-
-            if (!location.IsExplored || !location.Explorable)
-                DisplayRenderers(false);
         }
     }
 
@@ -123,15 +120,21 @@ public class HexUnit : MonoBehaviour
 
         skinnedRenderers = GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
         renderers = GetComponentsInChildren<MeshRenderer>().ToList();
-        if(!spawnCell.IsExplored || !spawnCell.IsVisible)
+        if (spawnCell.IsExplored || spawnCell.IsVisible)
         {
             if (isEnemy)
                 DisplayRenderers(true);
         }
+        else
+        {
+            DisplayRenderers(false);
+        }
     }
 
+    bool isSwitchingDisplays;
     public void DisplayRenderers(bool show)
     {
+        //StopCoroutine("DisplayRenderers");
         for (int i = 0; i < skinnedRenderers.Count; i++)
         {
             skinnedRenderers[i].material.color = show ? new Color(1,1,1,1) : new Color(0,0,0,0);
@@ -143,6 +146,12 @@ public class HexUnit : MonoBehaviour
     }
     public IEnumerator DisplayRenderers(float aValue, float time)
     {
+        if (isSwitchingDisplays)
+            yield break;
+
+        isSwitchingDisplays = true;
+        if (aValue == 0)
+            aValue = 50;
         float alpha = skinnedRenderers[0].material.color.a;
         for (float t = 0; t < 1; t += Time.deltaTime / time)
         {
@@ -159,6 +168,7 @@ public class HexUnit : MonoBehaviour
 
             yield return null;
         }
+        isSwitchingDisplays = false;
     }
 
     public int GetMoveCost(HexCell fromCell, HexCell toCell, HexDirection direciton)
