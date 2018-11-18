@@ -45,8 +45,9 @@ public class HexMapEditor : MonoBehaviour
 
     void Awake()
     {
-        terrainMaterial.DisableKeyword("GRID_ON");
+        //terrainMaterial.DisableKeyword("GRID_ON");
         SetEditMode(false);
+        gameObject.SetActive(false);
     }
 
     void Update()

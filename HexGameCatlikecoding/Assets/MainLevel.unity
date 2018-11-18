@@ -1376,9 +1376,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: '.
-
-'
+  m_Text: 5
 --- !u!222 &137692062
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2589,9 +2587,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: '.
-
-'
+  m_Text: 1
 --- !u!222 &305861930
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2767,9 +2763,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'HP 20
-
-'
+  m_Text: HP 8
 --- !u!222 &325884928
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3524,9 +3518,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: '.
-
-'
+  m_Text: 13
 --- !u!222 &374922233
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3600,7 +3592,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: '.
+  m_Text: '20
 
 '
 --- !u!222 &387180295
@@ -4083,7 +4075,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Gunner
+  m_Text: Melee
 --- !u!222 &413427424
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4258,7 +4250,7 @@ RectTransform:
   - {fileID: 1078769168}
   - {fileID: 1325687178}
   m_Father: {fileID: 1119121348}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -4698,9 +4690,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: '.
-
-'
+  m_Text: 1
 --- !u!222 &488515319
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5141,9 +5131,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: '.
-
-'
+  m_Text: 6
 --- !u!222 &526193064
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5567,7 +5555,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'HP 20
+  m_Text: 'HP 5
 
 '
 --- !u!222 &556768895
@@ -6360,9 +6348,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: '.
-
-'
+  m_Text: 5
 --- !u!222 &600230376
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7729,7 +7715,7 @@ RectTransform:
   - {fileID: 412073726}
   - {fileID: 1328251436}
   m_Father: {fileID: 1119121348}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -8640,9 +8626,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: '.
-
-'
+  m_Text: 4
 --- !u!222 &833554202
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9905,9 +9889,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: '.
-
-'
+  m_Text: 3
 --- !u!222 &900140458
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -10106,9 +10088,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: '.
-
-'
+  m_Text: 4
 --- !u!222 &911314691
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -10791,7 +10771,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Gunner
+  m_Text: Spear
 --- !u!222 &961512964
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -11557,9 +11537,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: '.
-
-'
+  m_Text: 3
 --- !u!222 &1028925752
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -11839,7 +11817,7 @@ RectTransform:
   - {fileID: 258883001}
   - {fileID: 1845955933}
   m_Father: {fileID: 1119121348}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -12937,7 +12915,6 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 1930884168}
   - {fileID: 1043153487}
   - {fileID: 440898578}
   - {fileID: 1990925232}
@@ -13767,9 +13744,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: '.
-
-'
+  m_Text: 3
 --- !u!222 &1176283186
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -15274,7 +15249,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'HP 20
+  m_Text: 'HP 8
 
 '
 --- !u!222 &1321928448
@@ -15541,9 +15516,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: '.
-
-'
+  m_Text: 14
 --- !u!222 &1333084241
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -15690,9 +15663,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: '.
-
-'
+  m_Text: 4
 --- !u!222 &1338511477
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -17944,9 +17915,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: '.
-
-'
+  m_Text: 3
 --- !u!222 &1575650759
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -20014,9 +19983,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: '.
-
-'
+  m_Text: 6
 --- !u!222 &1739469639
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -21801,7 +21768,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Gunner
+  m_Text: Tank
 --- !u!222 &1886940948
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -22577,87 +22544,13 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Gunner
+  m_Text: Archer
 --- !u!222 &1925035548
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1925035545}
---- !u!1 &1930884165
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 1930884168}
-  - component: {fileID: 1930884167}
-  - component: {fileID: 1930884166}
-  m_Layer: 0
-  m_Name: Text
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1930884166
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1930884165}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 10
-    m_MaxSize: 40
-    m_Alignment: 0
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: New Text
---- !u!222 &1930884167
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1930884165}
---- !u!224 &1930884168
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1930884165}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3.490855, y: 3.4908562, z: 3.4908562}
-  m_Children: []
-  m_Father: {fileID: 1119121348}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -586, y: -379}
-  m_SizeDelta: {x: 160, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1932927504
 GameObject:
   m_ObjectHideFlags: 0
@@ -23107,7 +23000,7 @@ RectTransform:
   - {fileID: 1932927505}
   - {fileID: 1110450962}
   m_Father: {fileID: 1119121348}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -23446,9 +23339,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: '.
-
-'
+  m_Text: 6
 --- !u!222 &1976786062
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -23598,9 +23489,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: '.
-
-'
+  m_Text: 2
 --- !u!222 &1980474828
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -23674,9 +23563,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: '.
-
-'
+  m_Text: 16
 --- !u!222 &1981666947
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -23715,7 +23602,7 @@ RectTransform:
   - {fileID: 366826423}
   - {fileID: 1781281021}
   m_Father: {fileID: 1119121348}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -23960,7 +23847,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'HP 20
+  m_Text: 'HP 10
 
 '
 --- !u!222 &2003234264
@@ -24036,9 +23923,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: '.
-
-'
+  m_Text: 10
 --- !u!222 &2008493955
 CanvasRenderer:
   m_ObjectHideFlags: 0

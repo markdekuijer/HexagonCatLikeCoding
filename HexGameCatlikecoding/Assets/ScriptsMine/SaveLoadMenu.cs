@@ -23,12 +23,12 @@ public class SaveLoadMenu : MonoBehaviour
         {
             return null;
         }
-        return Path.Combine(Application.persistentDataPath, mapName + ".map");
+        return Path.Combine(Application.dataPath, "maps/" + mapName + ".map");
     }
 
     private void Start()
     {
-        Load(Path.Combine(Application.persistentDataPath, "11" + ".map"));
+        Load(Path.Combine(Application.dataPath, "maps/" + "level1" + ".map"));
     }
 
     public void Action()
