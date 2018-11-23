@@ -58,6 +58,7 @@ public class HexCellShaderData : MonoBehaviour
         {
             if(!UpdateCellData(transitioningCells[i], delta))
             {
+                if(transitioningCells[i].Unit)
                 transitioningCells[i--] = transitioningCells[transitioningCells.Count - 1];
                 transitioningCells.RemoveAt(transitioningCells.Count - 1);
             }
@@ -139,7 +140,7 @@ public class HexCellShaderData : MonoBehaviour
                 if (cell.IsVisible)
                     cell.Unit.DisplayRenderers(true);
                 else
-                    StartCoroutine(cell.Unit.DisplayRenderers(0, 1));
+                    cell.Unit.DisplayRenderers(false);
             }
         }
     }

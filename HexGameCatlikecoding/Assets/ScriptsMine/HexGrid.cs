@@ -280,6 +280,12 @@ public class HexGrid : MonoBehaviour
                         continue;
                 }
 
+                if (neighbor.HasRiver)
+                {
+                    if (!neighbor.HasRoads)
+                        continue;
+                }
+
                 int moveCost = unit.GetMoveCost(current, neighbor, d);
                 if (moveCost < 0)
                     continue;
@@ -351,6 +357,12 @@ public class HexGrid : MonoBehaviour
                 {
                     continue;
                 }
+                if (neighbor.HasRiver)
+                {
+                    if (!neighbor.HasRoads)
+                        continue;
+                }
+
                 HexEdgeType edgeType = current.GetEdgeType(neighbor);
                 if (edgeType == HexEdgeType.Cliff)
                 {
@@ -673,14 +685,17 @@ public class HexGrid : MonoBehaviour
         if (currentPathExists)
         {
             HexCell current = currentPathTo;
-            while (current != currentPathFrom)
+            if(current != null)
             {
-                current.SetLabel(null);
+                while (current != currentPathFrom)
+                {
+                    current.SetLabel(null);
+                    current.DisableHighlight();
+                    current = current.PathFrom;
+                }
                 current.DisableHighlight();
-                current = current.PathFrom;
+                currentPathExists = false;
             }
-            current.DisableHighlight();
-            currentPathExists = false;
         }
         currentPathFrom = currentPathTo = null;
     }

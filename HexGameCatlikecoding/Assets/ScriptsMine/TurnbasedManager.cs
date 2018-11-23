@@ -61,7 +61,6 @@ public class TurnbasedManager : MonoBehaviour
                 allyUnits[i].hasMovedThisTurn = false;
                 allyUnits[i].hasAttackThisTurn = false;
                 allyUnits[i].hasTurned = false;
-                print("asas");
             }
             print("playerTurnStart");
             HexGameUI.instance.CloseSelect();
@@ -81,27 +80,27 @@ public class TurnbasedManager : MonoBehaviour
     }
     IEnumerator GoThroughEnemys()
     {
-            for (int i = 0; i < enemySpawns.Count; i++)
-            {
-                if (Random.Range(0, 1) > 0.5)
-                    continue;
+        for (int i = 0; i < enemySpawns.Count; i++)
+        {
+            if (Random.Range(0, 1) > 0.2)
+                continue;
 
-                int index = Random.Range(0, 5);
-                HexUnit u = Instantiate(HexGameUI.instance.unitTypes.unitTypeIDs[index].GetComponent<HexUnit>());
-                u.Initialize(index, enemySpawns[i], true);
-                u.Grid = grid;
-                u.Location = enemySpawns[i];
-                TurnbasedManager.Instance.enemyUnits.Add(u);
-            }
+            int index = Random.Range(0, 5);
+            HexUnit u = Instantiate(HexGameUI.instance.unitTypes.unitTypeIDs[index].GetComponent<HexUnit>());
+            u.Initialize(index, enemySpawns[i], true);
+            u.Grid = grid;
+            u.Location = enemySpawns[i];
+            TurnbasedManager.Instance.enemyUnits.Add(u);
+        }
         for (int i = 0; i < enemyUnits.Count; i++)
         {
             if (enemyUnits[i].unitType.objectName == "castle")
                 continue;
             enemyUnits[i].CalculateNextMove(grid, allyUnits);
-            while (!enemyUnits[i].hasTurned)
-            {
+            //while (!enemyUnits[i].hasTurned)
+            //{
                 yield return null;
-            }
+            //}
         }
         InitNextTurn();
     }

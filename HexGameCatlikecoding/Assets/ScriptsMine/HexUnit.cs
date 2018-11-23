@@ -134,41 +134,15 @@ public class HexUnit : MonoBehaviour
     bool isSwitchingDisplays;
     public void DisplayRenderers(bool show)
     {
-        //StopCoroutine("DisplayRenderers");
         for (int i = 0; i < skinnedRenderers.Count; i++)
         {
-            skinnedRenderers[i].material.color = show ? new Color(1,1,1,1) : new Color(0,0,0,0);
+            skinnedRenderers[i].material.SetFloat("_Level", show ? 1 : 0);
         }
         for (int i = 0; i < renderers.Count; i++)
         {
-            renderers[i].material.color = show ? new Color(1, 1, 1, 1) : new Color(0, 0, 0, 0);
+            renderers[i].material.SetFloat("_Level", show ? 1 : 0);
         }
-    }
-    public IEnumerator DisplayRenderers(float aValue, float time)
-    {
-        if (isSwitchingDisplays)
-            yield break;
-
-        isSwitchingDisplays = true;
-        if (aValue == 0)
-            aValue = 50;
-        float alpha = skinnedRenderers[0].material.color.a;
-        for (float t = 0; t < 1; t += Time.deltaTime / time)
-        {
-            for (int i = 0; i < skinnedRenderers.Count; i++)
-            {
-                Color newColor = new Color(1, 1, 1, Mathf.Lerp(alpha, aValue, t));
-                skinnedRenderers[i].material.color = newColor;
-            }
-            for (int i = 0; i < renderers.Count; i++)
-            {
-                Color newColor = new Color(1, 1, 1, Mathf.Lerp(alpha, aValue, t));
-                renderers[i].material.color = newColor;
-            }
-
-            yield return null;
-        }
-        isSwitchingDisplays = false;
+   
     }
 
     public int GetMoveCost(HexCell fromCell, HexCell toCell, HexDirection direciton)
@@ -427,6 +401,8 @@ public class HexUnit : MonoBehaviour
     #region dmg
     public void DoDamage(HexUnit otherUnit)
     {
+        if (otherUnit == null)
+            return;
         otherUnit.TakeDamage(unitType.damage); 
     }
     public void TakeDamage(int damage)

@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: TempPlayer
+  m_Shader: {fileID: 4800000, guid: fc6813915d2ae7d43954ebf88a6b9533, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _DistortionMap:
+        m_Texture: {fileID: 2800000, guid: f0f815ad02ae5cc428f291b839b12414, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: f0f815ad02ae5cc428f291b839b12414, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 2800000, guid: 1cc5ac391c8d640489328fff2ea40ab7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - PixelSnap: 0
+    - _Amount: 0.638
+    - _Amplitude: 1
+    - _Blending: 0.5393515
+    - _CutoutThresh: 1
+    - _Distance: 1
+    - _DisturbanceScale: 0.206
+    - _Edges: 0
+    - _Level: 0
+    - _MaskClipValue: 0.5
+    - _RippleScale: 3.4
+    - _RippleSpeed: 0.282
+    - _Speed: 1
+    - _Transparency: 0.5
+    - __dirty: 1
+    m_Colors:
+    - _EdgeColour1: {r: 1, g: 1, b: 1, a: 1}
+    - _EdgeColour2: {r: 1, g: 1, b: 1, a: 1}
+    - _TintColor: {r: 1, g: 1, b: 1, a: 1}
