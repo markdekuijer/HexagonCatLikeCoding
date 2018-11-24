@@ -23,6 +23,8 @@ public class SaveLoadMenu : MonoBehaviour
         {
             return null;
         }
+        if (mapName == "")
+            mapName = "level1";
         return Path.Combine(Application.dataPath, "maps/" + mapName + ".map");
     }
 

@@ -131,7 +131,6 @@ public class HexUnit : MonoBehaviour
         }
     }
 
-    bool isSwitchingDisplays;
     public void DisplayRenderers(bool show)
     {
         for (int i = 0; i < skinnedRenderers.Count; i++)
