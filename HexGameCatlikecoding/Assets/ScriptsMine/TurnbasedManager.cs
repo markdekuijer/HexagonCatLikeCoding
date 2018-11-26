@@ -17,6 +17,8 @@ public class TurnbasedManager : MonoBehaviour
     public List<HexUnit> enemyUnits = new List<HexUnit>();
     public List<HexCell> enemySpawns = new List<HexCell>();
 
+    private bool allowSpawn;
+
     private void Awake()
     {
         if (Instance == null)
@@ -31,6 +33,9 @@ public class TurnbasedManager : MonoBehaviour
 
     void Update ()
     {
+        if (Input.GetKeyDown(KeyCode.P))
+            allowSpawn = true;
+
         if (playerTurn)
         {
             endTurnButton.SetActive(true);
@@ -44,11 +49,6 @@ public class TurnbasedManager : MonoBehaviour
             StartCoroutine(GoThroughEnemys());
             enemyTurned = true;
         }
-    }
-
-    private void LateUpdate()
-    {
-        
     }
 
     public void InitNextTurn()
@@ -80,17 +80,20 @@ public class TurnbasedManager : MonoBehaviour
     }
     IEnumerator GoThroughEnemys()
     {
-        for (int i = 0; i < enemySpawns.Count; i++)
+        if (allowSpawn)
         {
-            if (Random.Range(0, 1) > 0.2)
-                continue;
+            for (int i = 0; i < enemySpawns.Count; i++)
+            {
+                if (Random.Range(0, 1) > 0.15)
+                    continue;
 
-            int index = Random.Range(0, 5);
-            HexUnit u = Instantiate(HexGameUI.instance.unitTypes.unitTypeIDs[index].GetComponent<HexUnit>());
-            u.Initialize(index, enemySpawns[i], true);
-            u.Grid = grid;
-            u.Location = enemySpawns[i];
-            TurnbasedManager.Instance.enemyUnits.Add(u);
+                int index = Random.Range(0, 5);
+                HexUnit u = Instantiate(HexGameUI.instance.unitTypes.unitTypeIDs[index].GetComponent<HexUnit>());
+                u.Initialize(index, enemySpawns[i], true);
+                u.Grid = grid;
+                u.Location = enemySpawns[i];
+                TurnbasedManager.Instance.enemyUnits.Add(u);
+            }
         }
         for (int i = 0; i < enemyUnits.Count; i++)
         {

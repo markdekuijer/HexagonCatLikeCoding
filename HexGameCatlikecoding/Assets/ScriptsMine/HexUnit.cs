@@ -15,6 +15,7 @@ public class HexUnit : MonoBehaviour
     public bool hasAttackThisTurn;
     public bool hasTurned;
     public bool isEnemy;
+    [SerializeField] private GameObject enemyIndicator;
 
     public HexUnitAnimator animHandler;
     private List<SkinnedMeshRenderer> skinnedRenderers = new List<SkinnedMeshRenderer>();
@@ -120,6 +121,9 @@ public class HexUnit : MonoBehaviour
 
         skinnedRenderers = GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
         renderers = GetComponentsInChildren<MeshRenderer>().ToList();
+        if (isEnemy)
+            if(enemyIndicator != null)
+                enemyIndicator.SetActive(true);
         if (spawnCell.IsExplored || spawnCell.IsVisible)
         {
             if (isEnemy)
@@ -135,13 +139,14 @@ public class HexUnit : MonoBehaviour
     {
         for (int i = 0; i < skinnedRenderers.Count; i++)
         {
-            skinnedRenderers[i].material.SetFloat("_Level", show ? 1 : 0);
+            skinnedRenderers[i].material.color = show ? new Color(1, 1, 1, 1) : new Color(0, 0, 0, 0);
         }
         for (int i = 0; i < renderers.Count; i++)
         {
-            renderers[i].material.SetFloat("_Level", show ? 1 : 0);
+            renderers[i].material.color = show ? new Color(1, 1, 1, 1) : new Color(0, 0, 0, 0);
         }
-   
+        if(enemyIndicator != null)
+            enemyIndicator.SetActive(show);
     }
 
     public int GetMoveCost(HexCell fromCell, HexCell toCell, HexDirection direciton)
